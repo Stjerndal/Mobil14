@@ -73,7 +73,10 @@ public class Sprite {
 	}
 
 	public boolean isWithinBounds(int x, int y) {
-		return false; // TODO
+		if (x > posX && x < posX + width - 1 && y > posY && y < posY + height - 1)
+			return true;
+		else
+			return false;
 	}
 
 	/**
