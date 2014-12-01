@@ -22,13 +22,13 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public final int X_RESOLUTION, Y_RESOLUTION;
 
-	private final Drawable whiteMan, blackMan; // representations of the
-												// actual images
+	private final Drawable whiteMarker, blackMarker; // representations of the
+	// actual images
 	private final Drawable boardPic;
 
 	private Sprite boardSprite;
 
-	private ArrayList<Sprite> whiteMen, blackMen;
+	private ArrayList<Sprite> whiteSprites, blackSprites;
 
 	private GraphicsThread graphicsThread;
 	private Handler handler = new Handler();
@@ -52,8 +52,8 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		Y_RESOLUTION = yRes;
 
 		// Create movable icons using the specified images
-		whiteMan = context.getResources().getDrawable(R.drawable.white_man);
-		blackMan = context.getResources().getDrawable(R.drawable.black_man);
+		whiteMarker = context.getResources().getDrawable(R.drawable.white_man);
+		blackMarker = context.getResources().getDrawable(R.drawable.black_man);
 
 		boardPic = context.getResources().getDrawable(R.drawable.nmm_board);
 		boardSprite = new Sprite(0, 0, boardPic, X_RESOLUTION, Y_RESOLUTION, 0.9f);
@@ -61,15 +61,15 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 		// TODO HERE -- INITIALIZE ALL MEN
 
-		whiteMen = new ArrayList<Sprite>();
-		blackMen = new ArrayList<Sprite>();
+		whiteSprites = new ArrayList<Sprite>();
+		blackSprites = new ArrayList<Sprite>();
 
 		initGame();
 	}
 
 	private void initGame() {
-		whiteMen.clear();
-		blackMen.clear();
+		whiteSprites.clear();
+		blackSprites.clear();
 
 		selectedMarker = false;
 		selectedMove = false;
@@ -112,13 +112,13 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			int x = (int) event.getX();
 			int y = (int) event.getY();
 
-			ArrayList<Sprite> listToCheck;
+			ArrayList<Sprite> listToCheck = new ArrayList<Sprite>();
 			if (rules.getPlayerInTurn() == rules.WHITE_MARKER)
-				listToCheck = whiteMen;
+				listToCheck = whiteSprites;
 			if (rules.getPlayerInTurn() == rules.BLACK_MARKER)
-				listToCheck = blackMen;
+				listToCheck = blackSprites;
 
-			bool isSelectingMarker = false;
+			boolean isSelectingMarker = false;
 			for (Sprite sprite : listToCheck) {
 				if (sprite.isWithinBounds(x, y)) {
 					clickedSprite = sprite;
@@ -132,7 +132,8 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 			// check to see if we want to place a marker somewhere
 			if (!isSelectingMarker && selectedMarker) {
-				// TODO
+				// TODO logic to check if we selected valid move
+				selectedMove = true;
 			}
 
 			// TODO HERE -- HANDLE INPUT
@@ -147,6 +148,10 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 	protected void move() {
 		// TODO HERE -- MOVE LOGIC
+
+		if (selectedMarker && selectedMove) {
+
+		}
 	}
 
 	protected void draw() {
@@ -161,10 +166,10 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			canvas.drawPaint(paint);
 
 			// Draw the movables
-			for (Man m : whiteMen) {
+			for (Sprite m : whiteSprites) {
 				m.draw(canvas);
 			}
-			for (Man m : blackMen) {
+			for (Sprite m : blackSprites) {
 				m.draw(canvas);
 			}
 
