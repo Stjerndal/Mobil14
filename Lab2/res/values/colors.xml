@@ -3,4 +3,5 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="sort_of_red">#CC4444</color>
+    <color name="board_bg">#FFA868</color>
 </resources>
