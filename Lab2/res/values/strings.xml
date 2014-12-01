@@ -4,5 +4,6 @@
     <string name="app_name">Lab2</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="welcome">Nine Men’s Morris</string>
 
 </resources>
