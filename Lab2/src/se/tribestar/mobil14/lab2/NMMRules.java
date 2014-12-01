@@ -13,21 +13,21 @@ package se.tribestar.mobil14.lab2;
 
 public class NMMRules {
 	private int[] gameplan;
-	private int bluemarker, redmarker;
+	private int whitemarker, blackmarker;
 	private int turn; // player in turn
 
-	public static final int BLUE_MOVES = 1;
-	public static final int READ_MOVES = 2;
+	public static final int WHITE_MOVES = 1;
+	public static final int BLACK_MOVES = 2;
 
 	public static final int EMPTY_SPACE = 0;
-	public static final int BLUE_MARKER = 4;
-	public static final int READ_MARKER = 5;
+	public static final int WHITE_MARKER = 4;
+	public static final int BLACK_MARKER = 5;
 
 	public NMMRules() {
 		gameplan = new int[25]; // zeroes
-		bluemarker = 9;
-		redmarker = 9;
-		turn = READ_MOVES;
+		whitemarker = 9;
+		blackmarker = 9;
+		turn = WHITE_MOVES;
 	}
 
 	/**
@@ -35,12 +35,12 @@ public class NMMRules {
 	 */
 	public boolean legalMove(int To, int From, int color) {
 		if (color == turn) {
-			if (turn == READ_MOVES) {
-				if (redmarker >= 0) {
+			if (turn == BLACK_MOVES) {
+				if (blackmarker >= 0) {
 					if (gameplan[To] == EMPTY_SPACE) {
-						gameplan[To] = READ_MARKER;
-						redmarker--;
-						turn = BLUE_MOVES;
+						gameplan[To] = BLACK_MARKER;
+						blackmarker--;
+						turn = WHITE_MOVES;
 						return true;
 					}
 				}
@@ -48,8 +48,8 @@ public class NMMRules {
 				if (gameplan[To] == EMPTY_SPACE) {
 					boolean valid = isValidMove(To, From);
 					if (valid == true) {
-						gameplan[To] = READ_MARKER;
-						turn = BLUE_MOVES;
+						gameplan[To] = BLACK_MARKER;
+						turn = WHITE_MOVES;
 						return true;
 					} else {
 						return false;
@@ -58,19 +58,19 @@ public class NMMRules {
 					return false;
 				}
 			} else {
-				if (bluemarker >= 0) {
+				if (whitemarker >= 0) {
 					if (gameplan[To] == EMPTY_SPACE) {
-						gameplan[To] = BLUE_MARKER;
-						bluemarker--;
-						turn = READ_MOVES;
+						gameplan[To] = WHITE_MARKER;
+						whitemarker--;
+						turn = BLACK_MOVES;
 						return true;
 					}
 				}
 				if (gameplan[To] == EMPTY_SPACE) {
 					boolean valid = isValidMove(To, From);
 					if (valid == true) {
-						gameplan[To] = BLUE_MARKER;
-						turn = READ_MOVES;
+						gameplan[To] = WHITE_MARKER;
+						turn = BLACK_MOVES;
 						return true;
 					} else {
 						return false;
@@ -148,7 +148,7 @@ public class NMMRules {
 				countMarker++;
 			count++;
 		}
-		if (bluemarker <= 0 && redmarker <= 0 && countMarker < 3)
+		if (whitemarker <= 0 && blackmarker <= 0 && countMarker < 3)
 			return true;
 		else
 			return false;
@@ -220,5 +220,9 @@ public class NMMRules {
 			return (from == 3 || from == 21 || from == 23);
 		}
 		return false;
+	}
+
+	public int getPlayerInTurn() {
+		return turn;
 	}
 }

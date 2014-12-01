@@ -28,10 +28,17 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private Sprite boardSprite;
 
-	private ArrayList<Man> whiteMen, blackMen;
+	private ArrayList<Sprite> whiteMen, blackMen;
 
 	private GraphicsThread graphicsThread;
 	private Handler handler = new Handler();
+
+	private NMMRules rules;
+
+	private Sprite clickedSprite;
+
+	private boolean selectedMarker;
+	private boolean selectedMove;
 
 	public NMMView(Context context, int xRes, int yRes) {
 		super(context);
@@ -54,8 +61,8 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 		// TODO HERE -- INITIALIZE ALL MEN
 
-		whiteMen = new ArrayList<Man>();
-		blackMen = new ArrayList<Man>();
+		whiteMen = new ArrayList<Sprite>();
+		blackMen = new ArrayList<Sprite>();
 
 		initGame();
 	}
@@ -63,6 +70,10 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	private void initGame() {
 		whiteMen.clear();
 		blackMen.clear();
+
+		selectedMarker = false;
+		selectedMove = false;
+		rules = new NMMRules();
 
 		// slMovable.setPosition(X_RESOLUTION / 2, Y_RESOLUTION -
 		// slMovable.getIconBounds().height() - 150);
@@ -98,6 +109,32 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			// int x = (int) event.getX();
+			int x = (int) event.getX();
+			int y = (int) event.getY();
+
+			ArrayList<Sprite> listToCheck;
+			if (rules.getPlayerInTurn() == rules.WHITE_MARKER)
+				listToCheck = whiteMen;
+			if (rules.getPlayerInTurn() == rules.BLACK_MARKER)
+				listToCheck = blackMen;
+
+			bool isSelectingMarker = false;
+			for (Sprite sprite : listToCheck) {
+				if (sprite.isWithinBounds(x, y)) {
+					clickedSprite = sprite;
+					isSelectingMarker = true;
+					selectedMarker = true;
+					// TODO -- Insert some animation or something to let the
+					// user know it selected a marker
+					break;
+				}
+			}
+
+			// check to see if we want to place a marker somewhere
+			if (!isSelectingMarker && selectedMarker) {
+				// TODO
+			}
+
 			// TODO HERE -- HANDLE INPUT
 
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
