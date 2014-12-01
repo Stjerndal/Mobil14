@@ -72,13 +72,6 @@ public class Sprite {
 		return new Rect((int) posX, (int) posY, (int) posX + width, (int) posY + height);
 	}
 
-	public boolean isWithinBounds(int x, int y) {
-		if (x > posX && x < posX + width - 1 && y > posY && y < posY + height - 1)
-			return true;
-		else
-			return false;
-	}
-
 	/**
 	 * Paint this icon on the specified canvas
 	 */
