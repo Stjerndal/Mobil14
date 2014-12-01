@@ -9,7 +9,7 @@
 		android:text="@string/welcome" android:textSize="16sp"
 		android:textColor="@color/sort_of_red" android:paddingBottom="5sp"></TextView>
 	<ImageView android:layout_height="wrap_content"
-		android:layout_width="wrap_content" android:src="@drawable/circle_black"
+		android:layout_width="wrap_content" android:src="@drawable/black_man"
 		android:id="@+id/imageView1" android:paddingLeft="0sp"
 		android:paddingBottom="10sp"></ImageView>
 
