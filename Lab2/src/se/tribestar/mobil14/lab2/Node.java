@@ -57,4 +57,8 @@ public class Node {
 		else
 			return false;
 	}
+
+	public Rect getRect() {
+		return bounds;
+	}
 }
