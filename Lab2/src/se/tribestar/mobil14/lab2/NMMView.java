@@ -159,7 +159,11 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 			// Draw the movables
 			for (Node node : nodes) {
-				node.getSprite().draw(canvas);
+				try {
+					node.getSprite().draw(canvas);
+				} catch (Exception e) {
+
+				}
 			}
 
 			// boardPic.setBounds(new Rect((int) 0, (int) 50, (int) 0 +
