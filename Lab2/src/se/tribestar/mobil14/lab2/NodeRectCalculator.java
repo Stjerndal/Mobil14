@@ -9,7 +9,14 @@ public class NodeRectCalculator {
 	private static final int[] realIndices = { 0, 3, 6, 8, 10, 12, 16, 17, 18, 21, 22, 23, 25, 26, 27, 30, 31, 32, 36,
 			38, 40, 42, 45, 48 }; // awesome hardcodning
 
-	public static Node[] getNodes(int x, int y, int width, int height) {
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @return
+	 */
+	public static Node[] getNodes(int x, int y, int width) {
 		Node[] nodes = new Node[24];
 		int rectSize = width / 7;
 		int indx = 0; // 0-48
