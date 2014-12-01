@@ -60,6 +60,14 @@ public class Sprite {
 		return posY;
 	}
 
+	public int getWidth() {
+		return this.width;
+	}
+
+	public int getHeight() {
+		return this.height;
+	}
+
 	/**
 	 * Move the icon (dX, dY) in pixels
 	 */
