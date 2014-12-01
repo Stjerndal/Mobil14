@@ -17,13 +17,13 @@ public class NodeRectCalculator {
 	 *            the x pixel coordinate of the left side of the board
 	 * @param y
 	 *            the y pixel coordinate of the top side the board
-	 * @param width
-	 *            the width of the board
+	 * @param sideLength
+	 *            the sideLength of the square board
 	 * @return an array of nodes with correct rect bounds.
 	 */
-	public static Node[] generateNodes(int x, int y, int width) {
+	public static Node[] generateNodes(int x, int y, int sideLength) {
 		Node[] nodes = new Node[24];
-		int rectSize = width / 7;
+		int rectSize = sideLength / 7;
 		int indx = 0; // 0-48
 		int nodeIndx = 0; // 0-23
 		// loop through every one of the 49 possible node positions
