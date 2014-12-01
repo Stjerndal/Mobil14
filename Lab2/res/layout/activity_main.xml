@@ -17,7 +17,7 @@
 	    android:layout_height="106dp"
 	    android:paddingBottom="10sp"
 	    android:paddingLeft="0sp"
-	    android:src="@drawable/black_man" >
+	    android:src="@drawable/nmm_board" >
 </ImageView>
 
 
