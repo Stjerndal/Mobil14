@@ -10,6 +10,7 @@ public class NodeRectCalculator {
 			38, 40, 42, 45, 48 }; // awesome hardcodning
 
 	/**
+	 * Generate nodes.
 	 * 
 	 * @param x
 	 *            the x pixel coordinate of the left side of the board
@@ -19,7 +20,7 @@ public class NodeRectCalculator {
 	 *            the width of the board
 	 * @return
 	 */
-	public static Node[] getNodes(int x, int y, int width) {
+	public static Node[] generateNodes(int x, int y, int width) {
 		Node[] nodes = new Node[24];
 		int rectSize = width / 7;
 		int indx = 0; // 0-48
