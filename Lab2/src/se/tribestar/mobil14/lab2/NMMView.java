@@ -35,10 +35,11 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private NMMRules rules;
 
-	private Sprite clickedSprite;
+	private Node selectedMarker;
+	private Node selectedDestination;
 
-	private boolean selectedMarker;
-	private boolean selectedMove;
+	private boolean hasSelectedMarker;
+	private boolean hasSelectedDestination;
 
 	public NMMView(Context context, int xRes, int yRes) {
 		super(context);
@@ -69,11 +70,11 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	private void initGame() {
 
 		for (Node node : nodes) {
-			node.removeSprite();
+			node.removePlayer();
 		}
 
-		selectedMarker = false;
-		selectedMove = false;
+		hasSelectedMarker = false;
+		hasSelectedDestination = false;
 		rules = new NMMRules();
 
 		// slMovable.setPosition(X_RESOLUTION / 2, Y_RESOLUTION -
@@ -113,28 +114,22 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			int x = (int) event.getX();
 			int y = (int) event.getY();
 
-			ArrayList<Sprite> listToCheck = new ArrayList<Sprite>();
-			if (rules.getPlayerInTurn() == rules.WHITE_MARKER)
-				listToCheck = whiteSprites;
-			if (rules.getPlayerInTurn() == rules.BLACK_MARKER)
-				listToCheck = blackSprites;
-
 			boolean isSelectingMarker = false;
 			for (Node node : nodes) {
-				if (sprite.isWithinBounds(x, y)) {
-					clickedSprite = sprite;
-					isSelectingMarker = true;
-					selectedMarker = true;
+				if (node.isWithinBounds(x, y)) {
+					if (node.getPlayerColor() == rules.getPlayerInTurn()) {
+						selectedMarker = node;
+						isSelectingMarker = true;
+						hasSelectedMarker = true;
+					} else if (node.getPlayerColor() == rules.EMPTY_SPACE && hasSelectedMarker) {
+						selectedDestination = node;
+						hasSelectedDestination = true;
+					}
+
 					// TODO -- Insert some animation or something to let the
 					// user know it selected a marker
 					break;
 				}
-			}
-
-			// check to see if we want to place a marker somewhere
-			if (!isSelectingMarker && selectedMarker) {
-				// TODO logic to check if we selected valid move
-				selectedMove = true;
 			}
 
 			// TODO HERE -- HANDLE INPUT
@@ -148,10 +143,13 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	protected void move() {
-		// TODO HERE -- MOVE LOGIC
 
-		if (selectedMarker && selectedMove) {
+		if (hasSelectedMarker && hasSelectedDestination) {
 
+			// TODO HERE -- MOVE LOGIC
+
+			hasSelectedMarker = false;
+			hasSelectedDestination = false;
 		}
 	}
 
@@ -167,11 +165,8 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			canvas.drawPaint(paint);
 
 			// Draw the movables
-			for (Sprite m : whiteSprites) {
-				m.draw(canvas);
-			}
-			for (Sprite m : blackSprites) {
-				m.draw(canvas);
+			for (Node node : nodes) {
+				node.getSprite().draw(canvas);
 			}
 
 			// boardPic.setBounds(new Rect((int) 0, (int) 50, (int) 0 +
