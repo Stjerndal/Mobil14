@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:orientation="vertical" android:padding="10sp"
-	android:background="@color/white">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/board_bg"
+    android:orientation="vertical"
+    android:padding="10sp" >
 
 	<TextView android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:id="@+id/textView1"
 		android:text="@string/welcome" android:textSize="16sp"
 		android:textColor="@color/sort_of_red" android:paddingBottom="5sp"></TextView>
-	<ImageView android:layout_height="wrap_content"
-		android:layout_width="wrap_content" android:src="@drawable/black_man"
-		android:id="@+id/imageView1" android:paddingLeft="0sp"
-		android:paddingBottom="10sp"></ImageView>
+
+	<ImageView
+	    android:id="@+id/imageView1"
+	    android:layout_width="102dp"
+	    android:layout_height="106dp"
+	    android:paddingBottom="10sp"
+	    android:paddingLeft="0sp"
+	    android:src="@drawable/black_man" >
+</ImageView>
 
 
 	<LinearLayout android:id="@+id/linearLayout1"

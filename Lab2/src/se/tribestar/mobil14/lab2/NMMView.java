@@ -113,7 +113,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		{
 			// Paint the background
 			Paint paint = new Paint();
-			paint.setColor(Color.WHITE);
+			paint.setColor(getResources().getColor(R.color.board_bg));
 			canvas.drawPaint(paint);
 
 			// Draw the movables
