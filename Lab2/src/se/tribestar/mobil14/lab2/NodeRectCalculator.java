@@ -1,7 +1,5 @@
 package se.tribestar.mobil14.lab2;
 
-import java.util.Arrays;
-
 import android.graphics.Rect;
 
 public class NodeRectCalculator {
@@ -32,11 +30,12 @@ public class NodeRectCalculator {
 			int right = left + rectSize;
 			for (int j = 0; j < 7; ++j, ++indx) {
 				// only add the node if it is one of the 24 valid positions.
-				if (Arrays.asList(realIndices).contains(indx)) {
+				if (realIndices[nodeIndx] == indx) {
 					int top = y + j * rectSize;
 					int bottom = top + rectSize;
 					Rect rect = new Rect(left, top, right, bottom);
 					nodes[nodeIndx] = new Node(rect);
+					nodeIndx++;
 				}
 			}
 		}
