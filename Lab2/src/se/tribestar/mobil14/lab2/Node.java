@@ -4,15 +4,12 @@ import android.graphics.Rect;
 
 public class Node {
 
-	private int screenWidth, screenHeight; // screen sizes
 	private Sprite sprite;
 	private boolean hasPlayer;
 
 	private int playerColor;
 
 	private Rect bounds;
-
-	private int width, height;
 
 	public Node(Rect rect) {
 		this.bounds = rect;
