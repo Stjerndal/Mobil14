@@ -24,6 +24,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private final Drawable whiteMan, blackMan; // representations of the
 												// actual images
+	private final Drawable board;
 
 	private ArrayList<Man> whiteMen, blackMen;
 
@@ -44,6 +45,8 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		// Create movable icons using the specified images
 		whiteMan = context.getResources().getDrawable(R.drawable.white_man);
 		blackMan = context.getResources().getDrawable(R.drawable.black_man);
+
+		board = context.getResources().getDrawable(R.drawable.nmm_board);
 
 		// TODO HERE -- INITIALIZE ALL MEN
 
