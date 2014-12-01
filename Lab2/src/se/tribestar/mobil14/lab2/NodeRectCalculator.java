@@ -10,7 +10,8 @@ public class NodeRectCalculator {
 			38, 40, 42, 45, 48 }; // awesome hardcodning
 
 	/**
-	 * Generate nodes.
+	 * Generate nodes, and gives them the appropriate pixel Rect bounds. A
+	 * square board is assumed.
 	 * 
 	 * @param x
 	 *            the x pixel coordinate of the left side of the board
@@ -18,17 +19,19 @@ public class NodeRectCalculator {
 	 *            the y pixel coordinate of the top side the board
 	 * @param width
 	 *            the width of the board
-	 * @return
+	 * @return an array of nodes with correct rect bounds.
 	 */
 	public static Node[] generateNodes(int x, int y, int width) {
 		Node[] nodes = new Node[24];
 		int rectSize = width / 7;
 		int indx = 0; // 0-48
 		int nodeIndx = 0; // 0-23
+		// loop through every one of the 49 possible node positions
 		for (int i = 0; i < 7; ++i) {
 			int left = x + i * rectSize;
 			int right = left + rectSize;
 			for (int j = 0; j < 7; ++j, ++indx) {
+				// only add the node if it is one of the 24 valid positions.
 				if (Arrays.asList(realIndices).contains(indx)) {
 					int top = y + j * rectSize;
 					int bottom = top + rectSize;
