@@ -26,8 +26,6 @@ public class Sprite {
 		this.sprite = sprite;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
-		this.width = sprite.getIntrinsicWidth();
-		this.height = sprite.getIntrinsicHeight();
 		setSize(partOfScreenWidth);
 	}
 
@@ -38,7 +36,7 @@ public class Sprite {
 
 	public void setSize(float partOfScreenWidth) {
 		this.width = (int) (screenWidth * partOfScreenWidth);
-		this.height = width * sprite.getIntrinsicWidth() / sprite.getIntrinsicHeight();
+		this.height = (int) (width * sprite.getIntrinsicWidth() / sprite.getIntrinsicHeight());
 	}
 
 	public void setPositionCenter() {
@@ -51,7 +49,7 @@ public class Sprite {
 	}
 
 	public void setPositionCenterX() {
-		this.posY = screenWidth / 2 - width / 2;
+		this.posX = screenWidth / 2 - width / 2;
 	}
 
 	public float getPosX() {
