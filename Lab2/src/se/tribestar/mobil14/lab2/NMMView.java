@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -25,7 +24,9 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private final Drawable whiteMan, blackMan; // representations of the
 												// actual images
-	private final Drawable board;
+	private final Drawable boardPic;
+
+	private Sprite boardSprite;
 
 	private ArrayList<Man> whiteMen, blackMen;
 
@@ -47,7 +48,9 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		whiteMan = context.getResources().getDrawable(R.drawable.white_man);
 		blackMan = context.getResources().getDrawable(R.drawable.black_man);
 
-		board = context.getResources().getDrawable(R.drawable.nmm_board);
+		boardPic = context.getResources().getDrawable(R.drawable.nmm_board);
+		boardSprite = new Sprite(0, 0, boardPic, X_RESOLUTION, Y_RESOLUTION, 0.9f);
+		boardSprite.setPositionCenter();
 
 		// TODO HERE -- INITIALIZE ALL MEN
 
@@ -128,9 +131,11 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				m.draw(canvas);
 			}
 
-			board.setBounds(new Rect((int) 0, (int) 50, (int) 0 + board.getIntrinsicWidth(), (int) 50
-					+ board.getIntrinsicHeight()));
-			board.draw(canvas);
+			// boardPic.setBounds(new Rect((int) 0, (int) 50, (int) 0 +
+			// boardPic.getIntrinsicWidth(), (int) 50
+			// + boardPic.getIntrinsicHeight()));
+			// boardPic.draw(canvas);
+			boardSprite.draw(canvas);
 
 			if (graphicsThread.isRunning() == false) {
 				paint.setColor(Color.RED);
