@@ -12,8 +12,11 @@ public class NodeRectCalculator {
 	/**
 	 * 
 	 * @param x
+	 *            the x pixel coordinate of the left side of the board
 	 * @param y
+	 *            the y pixel coordinate of the top side the board
 	 * @param width
+	 *            the width of the board
 	 * @return
 	 */
 	public static Node[] getNodes(int x, int y, int width) {
