@@ -6,7 +6,9 @@ public class Node {
 
 	private int screenWidth, screenHeight; // screen sizes
 	private Sprite sprite;
-	private boolean hasSprite;
+	private boolean hasPlayer;
+
+	private int playerColor;
 
 	private Rect bounds;
 
@@ -15,14 +17,20 @@ public class Node {
 	public Node(Rect rect) {
 		this.bounds = rect;
 		this.sprite = null;
-		hasSprite = false;
+		hasPlayer = false;
+		playerColor = 0;
 	}
 
-	public boolean setSprite(Sprite sprite) {
-		if (!hasSprite) {
+	public int getPlayerColor() {
+		return playerColor;
+	}
+
+	public boolean setPlayer(Sprite sprite, int color) {
+		if (!hasPlayer) {
 			this.sprite = sprite;
-			hasSprite = true;
-			return hasSprite;
+			this.playerColor = color;
+			hasPlayer = true;
+			return hasPlayer;
 		} else
 			return false;
 	}
@@ -31,8 +39,19 @@ public class Node {
 		return sprite;
 	}
 
-	public boolean hasSprite() {
-		return hasSprite;
+	public boolean hasPlayer() {
+		return hasPlayer;
+	}
+
+	public boolean removePlayer() {
+		if (hasPlayer) {
+			sprite = null;
+			playerColor = 0;
+			return true;
+		}
+		hasPlayer = false;
+		return false;
+
 	}
 
 	public boolean isWithinBounds(int x, int y) {

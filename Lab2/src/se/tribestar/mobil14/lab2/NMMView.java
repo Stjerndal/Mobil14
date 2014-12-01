@@ -28,7 +28,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private Sprite boardSprite;
 
-	private ArrayList<Sprite> whiteSprites, blackSprites;
+	private ArrayList<Node> nodes;
 
 	private GraphicsThread graphicsThread;
 	private Handler handler = new Handler();
@@ -61,15 +61,16 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 		// TODO HERE -- INITIALIZE ALL MEN
 
-		whiteSprites = new ArrayList<Sprite>();
-		blackSprites = new ArrayList<Sprite>();
+		nodes = new ArrayList<Node>();
 
 		initGame();
 	}
 
 	private void initGame() {
-		whiteSprites.clear();
-		blackSprites.clear();
+
+		for (Node node : nodes) {
+			node.removeSprite();
+		}
 
 		selectedMarker = false;
 		selectedMove = false;
@@ -119,7 +120,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				listToCheck = blackSprites;
 
 			boolean isSelectingMarker = false;
-			for (Sprite sprite : listToCheck) {
+			for (Node node : nodes) {
 				if (sprite.isWithinBounds(x, y)) {
 					clickedSprite = sprite;
 					isSelectingMarker = true;
