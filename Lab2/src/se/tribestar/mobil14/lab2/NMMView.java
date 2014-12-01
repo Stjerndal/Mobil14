@@ -1,7 +1,5 @@
 package se.tribestar.mobil14.lab2;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -28,7 +26,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private Sprite boardSprite;
 
-	private ArrayList<Node> nodes;
+	private Node[] nodes;
 
 	private GraphicsThread graphicsThread;
 	private Handler handler = new Handler();
@@ -61,7 +59,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		boardSprite.setPositionCenter();
 
 		// TODO HERE -- INITIALIZE ALL NODES
-		nodes = new ArrayList<Node>();
+		nodes = NodeRectCalculator.generateNodes(boardSprite.getPosX(), boardSprite.getPosY(), boardSprite.getWidth());
 
 		initGame();
 	}
