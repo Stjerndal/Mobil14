@@ -5,12 +5,12 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
 public class Sprite {
-	private float posX, posY; // position
+	private int posX, posY; // position
 	private Drawable sprite; // a representation of the icon image
 	private int screenWidth, screenHeight; // screen sizes
 	private int width, height;
 
-	public Sprite(float posX, float posY, Drawable sprite, int screenWidth, int screenHeight) {
+	public Sprite(int posX, int posY, Drawable sprite, int screenWidth, int screenHeight) {
 		this.posX = posX;
 		this.posY = posY;
 		this.sprite = sprite;
@@ -20,7 +20,7 @@ public class Sprite {
 		this.height = sprite.getIntrinsicHeight();
 	}
 
-	public Sprite(float posX, float posY, Drawable sprite, int screenWidth, int screenHeight, float partOfScreenWidth) {
+	public Sprite(int posX, int posY, Drawable sprite, int screenWidth, int screenHeight, float partOfScreenWidth) {
 		this.posX = posX;
 		this.posY = posY;
 		this.sprite = sprite;
@@ -29,7 +29,7 @@ public class Sprite {
 		setSize(partOfScreenWidth);
 	}
 
-	public void setPosition(float posX, float posY) {
+	public void setPosition(int posX, int posY) {
 		this.posX = posX;
 		this.posY = posY;
 	}
@@ -52,11 +52,11 @@ public class Sprite {
 		this.posX = screenWidth / 2 - width / 2;
 	}
 
-	public float getPosX() {
+	public int getPosX() {
 		return posX;
 	}
 
-	public float getPosY() {
+	public int getPosY() {
 		return posY;
 	}
 
@@ -77,7 +77,7 @@ public class Sprite {
 	}
 
 	public Rect getIconBounds() {
-		return new Rect((int) posX, (int) posY, (int) posX + width, (int) posY + height);
+		return new Rect(posX, posY, posX + width, posY + height);
 	}
 
 	/**
