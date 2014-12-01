@@ -60,8 +60,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		boardSprite = new Sprite(0, 0, boardPic, X_RESOLUTION, Y_RESOLUTION, 0.9f);
 		boardSprite.setPositionCenter();
 
-		// TODO HERE -- INITIALIZE ALL MEN
-
+		// TODO HERE -- INITIALIZE ALL NODES
 		nodes = new ArrayList<Node>();
 
 		initGame();
@@ -114,12 +113,10 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			int x = (int) event.getX();
 			int y = (int) event.getY();
 
-			boolean isSelectingMarker = false;
 			for (Node node : nodes) {
 				if (node.isWithinBounds(x, y)) {
 					if (node.getPlayerColor() == rules.getPlayerInTurn()) {
 						selectedMarker = node;
-						isSelectingMarker = true;
 						hasSelectedMarker = true;
 					} else if (node.getPlayerColor() == rules.EMPTY_SPACE && hasSelectedMarker) {
 						selectedDestination = node;
@@ -131,8 +128,6 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 					break;
 				}
 			}
-
-			// TODO HERE -- HANDLE INPUT
 
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
 			// TODO HERE -- HANDLE INPUT
