@@ -1,16 +1,28 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="se.tribestar.mobil14.lab2.MainActivity" >
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical" android:padding="10sp"
+	android:background="@color/white">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/textView1"
+		android:text="@string/welcome" android:textSize="16sp"
+		android:textColor="@color/sort_of_red" android:paddingBottom="5sp"></TextView>
+	<ImageView android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:src="@drawable/sl_logo"
+		android:id="@+id/imageView1" android:paddingLeft="0sp"
+		android:paddingBottom="10sp"></ImageView>
 
-</RelativeLayout>
+
+	<LinearLayout android:id="@+id/linearLayout1"
+		android:layout_width="wrap_content" android:orientation="horizontal"
+		android:paddingLeft="10sp" android:layout_height="wrap_content">
+
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/StartButton"
+			android:text="Start game" android:onClick="onStartClick"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/FinishButton"
+			android:text="Exit" android:onClick="onExitClick"></Button>
+	</LinearLayout>
+</LinearLayout>
