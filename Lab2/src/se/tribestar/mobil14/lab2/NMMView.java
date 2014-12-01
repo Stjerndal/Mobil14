@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -126,6 +127,10 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			for (Man m : blackMen) {
 				m.draw(canvas);
 			}
+
+			board.setBounds(new Rect((int) 0, (int) 50, (int) 0 + board.getIntrinsicWidth(), (int) 50
+					+ board.getIntrinsicHeight()));
+			board.draw(canvas);
 
 			if (graphicsThread.isRunning() == false) {
 				paint.setColor(Color.RED);
