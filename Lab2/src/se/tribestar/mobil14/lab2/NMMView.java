@@ -130,16 +130,16 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			for (int i = 0; i < nodes.length; i++) {
 				Node node = nodes[i];
 				if (node.isWithinBounds(x, y)) {
-					if (placePhase) {
+
+					if (placePhase && !removePhase) {
 						if (node.getPlayerColor() == rules.EMPTY_SPACE) {
 							selectedDestination = i;
 							hasSelectedDestination = true;
 						}
 
 					} else if (removePhase) {
-						System.err.println("HEERRROOO");
+
 						if (node.hasPlayer() && node.getPlayerColor() == rules.getPlayerInTurn()) {
-							System.err.println("HELLO?");
 							selectedMarker = i;
 							hasSelectedMarker = true;
 						}
@@ -216,14 +216,16 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		} else if (removePhase && hasSelectedMarker) {
 
 			if (rules.getPlayerInTurn() == rules.WHITE_MOVES) {
-				rules.remove(selectedMarker, rules.WHITE_MOVES);
-				nodes[selectedMarker].removePlayer();
-				removePhase = false;
+				if (rules.remove(selectedMarker, rules.WHITE_MOVES)) {
+					nodes[selectedMarker].removePlayer();
+					removePhase = false;
+				}
 			}
 			if (rules.getPlayerInTurn() == rules.BLACK_MOVES) {
-				rules.remove(selectedMarker, rules.BLACK_MOVES);
-				nodes[selectedMarker].removePlayer();
-				removePhase = false;
+				if (rules.remove(selectedMarker, rules.BLACK_MOVES)) {
+					nodes[selectedMarker].removePlayer();
+					removePhase = false;
+				}
 			}
 
 			hasSelectedMarker = false;
