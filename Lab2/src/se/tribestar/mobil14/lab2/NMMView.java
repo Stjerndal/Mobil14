@@ -137,8 +137,9 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 						}
 
 					} else if (removePhase) {
-
-						if (node.hasPlayer() && node.getPlayerColor() != rules.getPlayerInTurn()) {
+						System.err.println("HEERRROOO");
+						if (node.hasPlayer() && node.getPlayerColor() == rules.getPlayerInTurn()) {
+							System.err.println("HELLO?");
 							selectedMarker = i;
 							hasSelectedMarker = true;
 						}
@@ -185,7 +186,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 					blackMarkersToPlace--;
 					nodes[selectedDestination].setPlayer(
 							new Sprite(x, y, blackMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f), playerInTurn);
-				} else if (whiteMarkersToPlace > 0 && blackMarkersToPlace > 0) {
+				} else if (whiteMarkersToPlace <= 0 && blackMarkersToPlace <= 0) {
 					placePhase = false;
 					hasSelectedDestination = false;
 					return;
@@ -215,12 +216,12 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		} else if (removePhase && hasSelectedMarker) {
 
 			if (rules.getPlayerInTurn() == rules.WHITE_MOVES) {
-				rules.remove(selectedMarker, rules.BLACK_MOVES);
+				rules.remove(selectedMarker, rules.WHITE_MOVES);
 				nodes[selectedMarker].removePlayer();
 				removePhase = false;
 			}
 			if (rules.getPlayerInTurn() == rules.BLACK_MOVES) {
-				rules.remove(selectedMarker, rules.WHITE_MOVES);
+				rules.remove(selectedMarker, rules.BLACK_MOVES);
 				nodes[selectedMarker].removePlayer();
 				removePhase = false;
 			}
@@ -251,7 +252,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			paint.setTextSize(42);
 			paint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
 
-			if (placePhase) {
+			if (placePhase && !removePhase) {
 				if (rules.getPlayerInTurn() == rules.WHITE_MOVES) {
 					canvas.drawText("White's turn to place (" + whiteMarkersToPlace + " left)",
 							(float) X_RESOLUTION / 2, Y_RESOLUTION * 0.10f, paint);
@@ -264,7 +265,37 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			}
 			if (removePhase) {
 
-			} else {
+				if (!hasSelectedMarker) {
+
+					if (rules.getPlayerInTurn() == rules.WHITE_MOVES) {
+						canvas.drawText("Select a white marker to remove!", (float) X_RESOLUTION / 2,
+								Y_RESOLUTION * 0.10f, paint);
+					}
+					if (rules.getPlayerInTurn() == rules.BLACK_MOVES) {
+						canvas.drawText("Select a black marker to remove!", (float) X_RESOLUTION / 2,
+								Y_RESOLUTION * 0.10f, paint);
+					}
+
+				} else {
+
+				}
+
+			} else if (!placePhase && !removePhase) {
+
+				if (!hasSelectedMarker && !hasSelectedDestination) {
+					if (rules.getPlayerInTurn() == rules.WHITE_MOVES) {
+						canvas.drawText("Select a white marker to move!", (float) X_RESOLUTION / 2,
+								Y_RESOLUTION * 0.10f, paint);
+					}
+					if (rules.getPlayerInTurn() == rules.BLACK_MOVES) {
+						canvas.drawText("Select a black marker to move!", (float) X_RESOLUTION / 2,
+								Y_RESOLUTION * 0.10f, paint);
+					}
+				}
+				if (hasSelectedMarker && !hasSelectedDestination) {
+					canvas.drawText("Select a node to move this marker to!", (float) X_RESOLUTION / 2,
+							Y_RESOLUTION * 0.10f, paint);
+				}
 
 			}
 
