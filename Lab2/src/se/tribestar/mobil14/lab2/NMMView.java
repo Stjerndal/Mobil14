@@ -108,6 +108,16 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	public void restart() {
+		V.log("restart");
+		graphicsThread = new GraphicsThread(this, 20); // 20 ms between
+		// updates
+		if (hasSurface) {
+			graphicsThread.start();
+		}
+		initGame();
+	}
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		Log.i("TouchView.onTouchEvent", "event = " + event);
@@ -235,6 +245,26 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			// + boardPic.getIntrinsicHeight()));
 			// boardPic.draw(canvas);
 			boardSprite.draw(canvas);
+
+			paint.setColor(Color.RED);
+			paint.setTextAlign(Align.CENTER);
+			paint.setTextSize(42);
+			paint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
+
+			if (placePhase) {
+				if (rules.getPlayerInTurn() == rules.WHITE_MOVES) {
+					canvas.drawText("White's turn to place", (float) X_RESOLUTION / 2, 0.0f, paint);
+				}
+				if (rules.getPlayerInTurn() == rules.WHITE_MOVES) {
+					canvas.drawText("Blacks's turn to place", (float) X_RESOLUTION / 2, 0.0f, paint);
+				}
+
+			}
+			if (removePhase) {
+
+			} else {
+
+			}
 
 			// Draw the movables
 			for (Node node : nodes) {

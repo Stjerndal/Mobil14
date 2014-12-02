@@ -46,6 +46,7 @@ public class Node {
 		if (hasPlayer) {
 			sprite = null;
 			playerColor = 0;
+			hasPlayer = false;
 			return true;
 		}
 		hasPlayer = false;
