@@ -165,16 +165,22 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				if (playerColor == rules.WHITE_MOVES && whiteMarkersToPlace > 0) {
 					whiteMarkersToPlace--;
 					playerColor = rules.WHITE_MARKER;
+					nodes[selectedDestination].setPlayer(
+							new Sprite(x, y, whiteMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f), playerColor);
 				} else if (playerColor == rules.BLACK_MOVES && blackMarkersToPlace > 0) {
 					blackMarkersToPlace--;
 					playerColor = rules.BLACK_MARKER;
+					nodes[selectedDestination].setPlayer(
+							new Sprite(x, y, blackMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f), playerColor);
+				} else if (whiteMarkersToPlace > 0 && blackMarkersToPlace > 0) {
+					placePhase = false;
+					hasSelectedDestination = false;
+					return;
 				} else {
 					hasSelectedDestination = false;
 					return;
 				}
 
-				nodes[selectedDestination].setPlayer(new Sprite(x, y, whiteMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f),
-						playerColor);
 			}
 
 			hasSelectedDestination = false;
