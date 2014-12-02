@@ -11,11 +11,13 @@ public class Node {
 
 	private Rect bounds;
 
+	private NMMRules rules = new NMMRules();
+
 	public Node(Rect rect) {
 		this.bounds = rect;
 		this.sprite = null;
 		hasPlayer = false;
-		playerColor = 0;
+		playerColor = rules.EMPTY_SPACE;
 	}
 
 	public int getPlayerColor() {

@@ -25,7 +25,7 @@ public class GraphicsThread extends Thread {
 		while (running) {
 
 			// view.generateSnow();
-			// view.move();
+			view.move();
 			// view.checkForHit();
 			view.draw();
 
