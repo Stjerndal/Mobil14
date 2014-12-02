@@ -43,6 +43,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	private boolean hasSelectedDestination;
 
 	private boolean placePhase;
+	private boolean removePhase;
 
 	public NMMView(Context context, int xRes, int yRes) {
 		super(context);
@@ -63,7 +64,6 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		boardSprite = new Sprite(0, 0, boardPic, X_RESOLUTION, Y_RESOLUTION, 0.9f);
 		boardSprite.setPositionCenter();
 
-		// TODO HERE -- INITIALIZE ALL NODES
 		nodes = NodeRectCalculator.generateNodes(boardSprite.getPosX(), boardSprite.getPosY(), boardSprite.getWidth());
 
 		initGame();
@@ -78,14 +78,11 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		hasSelectedMarker = false;
 		hasSelectedDestination = false;
 		placePhase = true;
+		removePhase = false;
 
 		whiteMarkersToPlace = 9;
 		blackMarkersToPlace = 9;
 		rules = new NMMRules();
-
-		// slMovable.setPosition(X_RESOLUTION / 2, Y_RESOLUTION -
-		// slMovable.getIconBounds().height() - 150);
-		// TODO HERE -- SET POSITION OF ALL MEN
 
 		// NB!! Need this for capturing key events
 		setFocusable(true);
@@ -129,6 +126,13 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 							hasSelectedDestination = true;
 						}
 
+					} else if (removePhase) {
+
+						if (node.hasPlayer() && node.getPlayerColor() != rules.getPlayerInTurn()) {
+							selectedDestination = i;
+							hasSelectedDestination = true;
+						}
+
 					} else {
 						if (node.getPlayerColor() == rules.getPlayerInTurn()) {
 							selectedMarker = i;
@@ -139,7 +143,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 						}
 
 						// TODO -- Insert some animation or something to let the
-						// user know it selected a marker
+						// user know it made som action
 						break;
 					}
 
@@ -164,12 +168,10 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 				if (playerColor == rules.WHITE_MOVES && whiteMarkersToPlace > 0) {
 					whiteMarkersToPlace--;
-					playerColor = rules.WHITE_MARKER;
 					nodes[selectedDestination].setPlayer(
 							new Sprite(x, y, whiteMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f), playerColor);
 				} else if (playerColor == rules.BLACK_MOVES && blackMarkersToPlace > 0) {
 					blackMarkersToPlace--;
-					playerColor = rules.BLACK_MARKER;
 					nodes[selectedDestination].setPlayer(
 							new Sprite(x, y, blackMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f), playerColor);
 				} else if (whiteMarkersToPlace > 0 && blackMarkersToPlace > 0) {
@@ -187,9 +189,21 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 		} else if (hasSelectedMarker && hasSelectedDestination) {
 
-			// TODO HERE -- MOVE LOGIC
+			if (rules.legalMove(selectedMarker, selectedDestination, rules.getPlayerInTurn())) {
+				int x = nodes[selectedDestination].getRect().left;
+				int y = nodes[selectedDestination].getRect().top;
+				int playerColor = rules.getPlayerInTurn();
+				nodes[selectedMarker].removePlayer();
+				nodes[selectedDestination].setPlayer(new Sprite(x, y, blackMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f),
+						playerColor);
+			}
 
 			hasSelectedMarker = false;
+			hasSelectedDestination = false;
+		} else if (removePhase && hasSelectedDestination) {
+
+			// TODO
+
 			hasSelectedDestination = false;
 		}
 	}
@@ -227,6 +241,8 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				paint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
 				canvas.drawText("Game Over", (float) X_RESOLUTION / 2, (float) Y_RESOLUTION / 2, paint);
 			}
+
+			// TODO Draw phase-dependant messages
 		}
 		holder.unlockCanvasAndPost(canvas);
 	}
