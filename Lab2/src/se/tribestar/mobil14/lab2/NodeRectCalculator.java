@@ -21,19 +21,19 @@ public class NodeRectCalculator {
 	 */
 	public static Node[] generateNodes(int x, int y, int sideLength) {
 		Node[] nodes = new Node[24];
-		int rectSize = sideLength / 7;
+		float rectSize = sideLength / 7.0f;
 		int indx = 0; // 0-48
 		int nodeIndx = 0; // 0-23
 		// loop through every one of the 49 possible node positions
 		for (int i = 0; i < 7; ++i) {
-			int left = x + i * rectSize;
-			int right = left + rectSize;
+			float left = x + i * rectSize;
+			float right = left + rectSize;
 			for (int j = 0; j < 7; ++j, ++indx) {
 				// only add the node if it is one of the 24 valid positions.
 				if (realIndices[nodeIndx] == indx) {
-					int top = y + j * rectSize;
-					int bottom = top + rectSize;
-					Rect rect = new Rect(left, top, right, bottom);
+					float top = y + j * rectSize;
+					float bottom = top + rectSize;
+					Rect rect = new Rect((int) left, (int) top, (int) right, (int) bottom);
 					nodes[nodeIndx] = new Node(rect);
 					nodeIndx++;
 				}
