@@ -36,6 +36,9 @@ public class NMMRules {
 	 * Returns true if a move is successful
 	 */
 	public boolean legalMove(int To, int From, int color) {
+		To = V.convert(To);
+		From = V.convert(From);
+
 		if (color == turn) {
 			if (turn == BLACK_MOVES) {
 				if (blackmarker >= 0) {
@@ -90,6 +93,7 @@ public class NMMRules {
 	 * Returns true if position "to" is part of three in a row.
 	 */
 	public boolean remove(int to) {
+		to = V.convert(to);
 
 		if ((to == 1 || to == 4 || to == 7) && gameplan[1] == gameplan[4] && gameplan[4] == gameplan[7]) {
 			return true;
@@ -132,6 +136,8 @@ public class NMMRules {
 	 * marker where successfully removed
 	 */
 	public boolean remove(int From, int color) {
+		From = V.convert(From);
+
 		if (gameplan[From] == color) {
 			gameplan[From] = EMPTY_SPACE;
 			return true;
@@ -160,6 +166,8 @@ public class NMMRules {
 	 * Returns EMPTY_SPACE = 0 BLUE_MARKER = 4 READ_MARKER = 5
 	 */
 	public int board(int From) {
+		From = V.convert(From);
+
 		return gameplan[From];
 	}
 
@@ -167,6 +175,8 @@ public class NMMRules {
 	 * Check whether this is a legal move.
 	 */
 	private boolean isValidMove(int to, int from) {
+		to = V.convert(to);
+		from = V.convert(from);
 
 		if (this.gameplan[to] != EMPTY_SPACE)
 			return false;
