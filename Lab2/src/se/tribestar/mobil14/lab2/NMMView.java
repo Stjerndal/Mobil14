@@ -129,8 +129,8 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 					} else if (removePhase) {
 
 						if (node.hasPlayer() && node.getPlayerColor() != rules.getPlayerInTurn()) {
-							selectedDestination = i;
-							hasSelectedDestination = true;
+							selectedMarker = i;
+							hasSelectedMarker = true;
 						}
 
 					} else {
@@ -160,11 +160,12 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 	protected void move() {
 
-		if (placePhase && hasSelectedDestination) {
+		if (placePhase && hasSelectedDestination && !removePhase) {
 			if (rules.legalMove(selectedDestination, rules.UNPLACED, rules.getPlayerInTurn())) {
 				int x = nodes[selectedDestination].getRect().left;
 				int y = nodes[selectedDestination].getRect().top;
 				int playerColor = rules.getPlayerInTurn();
+				removePhase = rules.remove(selectedDestination);
 
 				if (playerColor == rules.WHITE_MOVES && whiteMarkersToPlace > 0) {
 					whiteMarkersToPlace--;
@@ -187,7 +188,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 			hasSelectedDestination = false;
 
-		} else if (hasSelectedMarker && hasSelectedDestination) {
+		} else if (hasSelectedMarker && hasSelectedDestination && !removePhase) {
 
 			if (rules.legalMove(selectedMarker, selectedDestination, rules.getPlayerInTurn())) {
 				int x = nodes[selectedDestination].getRect().left;
@@ -196,15 +197,25 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				nodes[selectedMarker].removePlayer();
 				nodes[selectedDestination].setPlayer(new Sprite(x, y, blackMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f),
 						playerColor);
+				removePhase = rules.remove(selectedDestination);
 			}
 
 			hasSelectedMarker = false;
 			hasSelectedDestination = false;
-		} else if (removePhase && hasSelectedDestination) {
+		} else if (removePhase && hasSelectedMarker) {
 
-			// TODO
+			if (rules.getPlayerInTurn() == rules.WHITE_MOVES) {
+				rules.remove(selectedMarker, rules.BLACK_MOVES);
+				nodes[selectedMarker].removePlayer();
+				removePhase = false;
+			}
+			if (rules.getPlayerInTurn() == rules.BLACK_MOVES) {
+				rules.remove(selectedMarker, rules.WHITE_MOVES);
+				nodes[selectedMarker].removePlayer();
+				removePhase = false;
+			}
 
-			hasSelectedDestination = false;
+			hasSelectedMarker = false;
 		}
 	}
 
