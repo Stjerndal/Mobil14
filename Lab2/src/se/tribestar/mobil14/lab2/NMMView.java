@@ -216,13 +216,15 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		} else if (removePhase && hasSelectedMarker) {
 
 			if (rules.getPlayerInTurn() == rules.WHITE_MOVES) {
-				if (rules.remove(selectedMarker, rules.WHITE_MOVES)) {
+				if (rules.remove(selectedMarker, rules.WHITE_MARKER)) {
+					System.err.println("HERRO1?");
 					nodes[selectedMarker].removePlayer();
 					removePhase = false;
 				}
 			}
 			if (rules.getPlayerInTurn() == rules.BLACK_MOVES) {
-				if (rules.remove(selectedMarker, rules.BLACK_MOVES)) {
+				if (rules.remove(selectedMarker, rules.BLACK_MARKER)) {
+					System.err.println("HERRO2?");
 					nodes[selectedMarker].removePlayer();
 					removePhase = false;
 				}
