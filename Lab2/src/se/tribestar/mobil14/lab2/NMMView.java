@@ -39,6 +39,8 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	private boolean hasSelectedMarker;
 	private boolean hasSelectedDestination;
 
+	private boolean placePhase;
+
 	public NMMView(Context context, int xRes, int yRes) {
 		super(context);
 
@@ -72,6 +74,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 		hasSelectedMarker = false;
 		hasSelectedDestination = false;
+		placePhase = false;
 		rules = new NMMRules();
 
 		// slMovable.setPosition(X_RESOLUTION / 2, Y_RESOLUTION -
@@ -137,7 +140,9 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 	protected void move() {
 
-		if (hasSelectedMarker && hasSelectedDestination) {
+		if (placePhase) {
+
+		} else if (hasSelectedMarker && hasSelectedDestination) {
 
 			// TODO HERE -- MOVE LOGIC
 
