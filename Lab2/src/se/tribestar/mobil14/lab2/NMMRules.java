@@ -23,6 +23,8 @@ public class NMMRules {
 	public static final int WHITE_MARKER = 4;
 	public static final int BLACK_MARKER = 5;
 
+	public static final int UNPLACED = -1;
+
 	public NMMRules() {
 		gameplan = new int[25]; // zeroes
 		whitemarker = 9;
@@ -138,7 +140,7 @@ public class NMMRules {
 	}
 
 	/**
-	 * Returns true if the selected player have less than three markerss left.
+	 * Returns true if the selected player have less than three markers left.
 	 */
 	public boolean win(int color) {
 		int countMarker = 0;
@@ -168,6 +170,9 @@ public class NMMRules {
 
 		if (this.gameplan[to] != EMPTY_SPACE)
 			return false;
+
+		if (from == UNPLACED)
+			return true;
 
 		switch (to) {
 		case 1:
