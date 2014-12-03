@@ -18,10 +18,10 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	private SurfaceHolder holder;
 	private boolean hasSurface;
 
-	public final int X_RESOLUTION, Y_RESOLUTION;
+	public static int X_RESOLUTION, Y_RESOLUTION;
 
-	private final Drawable whiteMarker, blackMarker; // representations of the
-	// actual images
+	// representations of the actual images
+	public static Drawable whiteMarker, blackMarker;
 	private final Drawable boardPic;
 
 	private Sprite boardSprite;
@@ -102,7 +102,9 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				graphicsThread.start();
 			}
 		}
+		initGame();
 		loadState();
+		updateNodes();
 	}
 
 	public void pause() {
@@ -186,12 +188,10 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 				if (playerInTurn == rules.WHITE_MOVES && whiteMarkersToPlace > 0) {
 					whiteMarkersToPlace--;
-					nodes[selectedDestination].setPlayer(
-							new Sprite(x, y, whiteMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f), playerInTurn);
+					nodes[selectedDestination].setPlayer(playerInTurn);
 				} else if (playerInTurn == rules.BLACK_MOVES && blackMarkersToPlace > 0) {
 					blackMarkersToPlace--;
-					nodes[selectedDestination].setPlayer(
-							new Sprite(x, y, blackMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f), playerInTurn);
+					nodes[selectedDestination].setPlayer(playerInTurn);
 				} else if (whiteMarkersToPlace <= 0 && blackMarkersToPlace <= 0) {
 					placePhase = false;
 					hasSelectedDestination = false;
@@ -212,8 +212,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				int y = nodes[selectedDestination].getRect().top;
 
 				nodes[selectedMarker].removePlayer();
-				nodes[selectedDestination].setPlayer(new Sprite(x, y, blackMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f),
-						playerInTurn);
+				nodes[selectedDestination].setPlayer(playerInTurn);
 				removePhase = rules.remove(selectedDestination);
 			}
 
@@ -318,13 +317,16 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				}
 			}
 
-			if (graphicsThread.isRunning() == false) {
-				paint.setColor(Color.RED);
-				paint.setTextAlign(Align.CENTER);
-				paint.setTextSize(42);
-				paint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
-				canvas.drawText("Game Over", (float) X_RESOLUTION / 2, (float) Y_RESOLUTION / 2, paint);
-			}
+			// if (graphicsThread.isRunning() == false) {
+			//
+			// paint.setColor(Color.RED);
+			// paint.setTextAlign(Align.CENTER);
+			// paint.setTextSize(42);
+			// paint.setTypeface(Typeface.create(Typeface.SERIF,
+			// Typeface.BOLD));
+			// canvas.drawText("Game Over", (float) X_RESOLUTION / 2, (float)
+			// Y_RESOLUTION / 2, paint);
+			// }
 
 			// TODO Draw phase-dependant messages
 		}
@@ -346,6 +348,12 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
 		if (graphicsThread != null) {
 			graphicsThread.onWindowResize(w, h);
+		}
+	}
+
+	public void updateNodes() {
+		for (int i = 0; i < nodes.length; i++) {
+			nodes[i].setPlayer(rules.board(i));
 		}
 	}
 
