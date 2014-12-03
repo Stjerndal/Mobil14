@@ -23,16 +23,18 @@ public class NMMActivity extends Activity {
 		this.setContentView(view);
 	}
 
+	// Life cycle method onResume
 	@Override
 	protected void onResume() {
-		super.onResume();
-		view.resume();
+		super.onResume(); // call superclass
+		view.resume(); // tell our surfaceview to resume
 	}
 
+	// Life cycle method onPause
 	@Override
 	protected void onPause() {
 		super.onPause();
-		view.pause();
+		view.pause();// tell our surfaceview to pause
 	}
 
 	@Override
@@ -42,11 +44,12 @@ public class NMMActivity extends Activity {
 		return true;
 	}
 
+	// If the player selects an options item
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.id.action_settings:
+		case R.id.action_settings: // if the player wants to restart the game
 			restartGame();
 			return true;
 		default:
@@ -55,7 +58,7 @@ public class NMMActivity extends Activity {
 	}
 
 	private void restartGame() {
-		view.restart();
+		view.restart(); // tell the view to restart the game.
 	}
 
 }
