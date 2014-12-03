@@ -238,96 +238,102 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	protected void draw() {
 		// TO DO: Draw on an off screen Bitmap before
 		// calling holder.lockCanvas()
+		try {
 
-		Canvas canvas = holder.lockCanvas();
-		{
-			// Paint the background
-			Paint paint = new Paint();
-			paint.setColor(getResources().getColor(R.color.board_bg));
-			canvas.drawPaint(paint);
-
-			// boardPic.setBounds(new Rect((int) 0, (int) 50, (int) 0 +
-			// boardPic.getIntrinsicWidth(), (int) 50
-			// + boardPic.getIntrinsicHeight()));
-			// boardPic.draw(canvas);
-			boardSprite.draw(canvas);
-
-			paint.setColor(Color.RED);
-			paint.setTextAlign(Align.CENTER);
-			paint.setTextSize(42);
-			paint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
-
-			if (placePhase && !removePhase) {
-				if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
-					showStatusText("White's turn to place (" + whiteMarkersToPlace + " left)", canvas, paint);
-				}
-				if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
-					showStatusText("Blacks's turn to place (" + blackMarkersToPlace + " left)", canvas, paint);
-				}
-
-			}
-			if (removePhase) {
-
-				if (!hasSelectedMarker) {
-
-					if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
-						showStatusText("Select a white marker to remove!", canvas, paint);
-					}
-					if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
-						showStatusText("Select a black marker to remove!", canvas, paint);
-					}
-
-				} else {
-
-				}
-
-			} else if (!placePhase && !removePhase) {
-
-				if (!hasSelectedMarker && !hasSelectedDestination) {
-					if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
-						showStatusText("Select a white marker to move!", canvas, paint);
-					}
-					if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
-						showStatusText("Select a black marker to move!", canvas, paint);
-					}
-				} else if (hasSelectedMarker && !hasSelectedDestination) {
-					showStatusText("Select a node to move to!", canvas, paint);
-				}
-
-			}
-
-			// Draw the movables
-			for (Node node : nodes) {
-				try {
-					node.getSprite().draw(canvas);
-				} catch (Exception e) {
-
-				}
-			}
-
-			int winner = checkGameOver();
-			if ((winner == NMMRules.WHITE_MOVES || winner == NMMRules.BLACK_MOVES) && !placePhase) {
-
-				paint = new Paint();
+			Canvas canvas = holder.lockCanvas();
+			{
+				// Paint the background
+				Paint paint = new Paint();
 				paint.setColor(getResources().getColor(R.color.board_bg));
 				canvas.drawPaint(paint);
+
+				// boardPic.setBounds(new Rect((int) 0, (int) 50, (int) 0 +
+				// boardPic.getIntrinsicWidth(), (int) 50
+				// + boardPic.getIntrinsicHeight()));
+				// boardPic.draw(canvas);
+				boardSprite.draw(canvas);
 
 				paint.setColor(Color.RED);
 				paint.setTextAlign(Align.CENTER);
 				paint.setTextSize(42);
 				paint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
 
-				if (winner == NMMRules.WHITE_MOVES) {
-					canvas.drawText("GAME OVER! White wins!", (float) X_RESOLUTION / 2, Y_RESOLUTION / 2, paint);
+				if (placePhase && !removePhase) {
+					if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
+						showStatusText("White's turn to place (" + whiteMarkersToPlace + " left)", canvas, paint);
+					}
+					if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
+						showStatusText("Blacks's turn to place (" + blackMarkersToPlace + " left)", canvas, paint);
+					}
+
+				}
+				if (removePhase) {
+
+					if (!hasSelectedMarker) {
+
+						if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
+							showStatusText("Select a white marker to remove!", canvas, paint);
+						}
+						if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
+							showStatusText("Select a black marker to remove!", canvas, paint);
+						}
+
+					} else {
+
+					}
+
+				} else if (!placePhase && !removePhase) {
+
+					if (!hasSelectedMarker && !hasSelectedDestination) {
+						if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
+							showStatusText("Select a white marker to move!", canvas, paint);
+						}
+						if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
+							showStatusText("Select a black marker to move!", canvas, paint);
+						}
+					} else if (hasSelectedMarker && !hasSelectedDestination) {
+						showStatusText("Select a node to move to!", canvas, paint);
+					}
+
 				}
 
-				if (winner == NMMRules.BLACK_MOVES) {
-					canvas.drawText("GAME OVER! Black wins!", (float) X_RESOLUTION / 2, Y_RESOLUTION / 2, paint);
+				// Draw the movables
+				for (Node node : nodes) {
+					try {
+						node.getSprite().draw(canvas);
+					} catch (Exception e) {
+
+					}
 				}
 
+				int winner = checkGameOver();
+				if ((winner == NMMRules.WHITE_MOVES || winner == NMMRules.BLACK_MOVES) && !placePhase) {
+
+					paint = new Paint();
+					paint.setColor(getResources().getColor(R.color.board_bg));
+					canvas.drawPaint(paint);
+
+					paint.setColor(Color.RED);
+					paint.setTextAlign(Align.CENTER);
+					paint.setTextSize(42);
+					paint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
+
+					if (winner == NMMRules.WHITE_MOVES) {
+						canvas.drawText("GAME OVER! White wins!", (float) X_RESOLUTION / 2, Y_RESOLUTION / 2, paint);
+					}
+
+					if (winner == NMMRules.BLACK_MOVES) {
+						canvas.drawText("GAME OVER! Black wins!", (float) X_RESOLUTION / 2, Y_RESOLUTION / 2, paint);
+					}
+
+				}
 			}
+
+			holder.unlockCanvasAndPost(canvas);
+
+		} catch (NullPointerException e) {
+			V.log("Nullpointer Exception, graphicsthread probably being closed");
 		}
-		holder.unlockCanvasAndPost(canvas);
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
