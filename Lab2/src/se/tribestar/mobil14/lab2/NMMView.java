@@ -148,7 +148,8 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 						if (node.getPlayerColor() == rules.getPlayerInTurn()) {
 							selectedMarker = i;
 							hasSelectedMarker = true;
-						} else if (node.getPlayerColor() == rules.EMPTY_SPACE && hasSelectedMarker) {
+						} else if (node.getPlayerColor() == rules.EMPTY_SPACE && hasSelectedMarker
+								&& !hasSelectedDestination) {
 							selectedDestination = i;
 							hasSelectedDestination = true;
 						}
@@ -201,30 +202,35 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 		} else if (hasSelectedMarker && hasSelectedDestination && !removePhase) {
 			int playerInTurn = rules.getPlayerInTurn();
-			if (rules.legalMove(selectedMarker, selectedDestination, playerInTurn)) {
+			if (rules.legalMove(selectedDestination, selectedMarker, playerInTurn)) {
 				int x = nodes[selectedDestination].getRect().left;
 				int y = nodes[selectedDestination].getRect().top;
-
 				nodes[selectedMarker].removePlayer();
-				nodes[selectedDestination].setPlayer(new Sprite(x, y, blackMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f),
-						playerInTurn);
+				if (playerInTurn == rules.WHITE_MOVES) {
+					nodes[selectedDestination].setPlayer(
+							new Sprite(x, y, whiteMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f), playerInTurn);
+				}
+
+				if (playerInTurn == rules.BLACK_MOVES) {
+					nodes[selectedDestination].setPlayer(
+							new Sprite(x, y, blackMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f), playerInTurn);
+				}
+
 				removePhase = rules.remove(selectedDestination);
 			}
 
 			hasSelectedMarker = false;
 			hasSelectedDestination = false;
-		} else if (removePhase && hasSelectedMarker) {
+		} else if (removePhase && hasSelectedMarker && !hasSelectedDestination) {
 
 			if (rules.getPlayerInTurn() == rules.WHITE_MOVES) {
 				if (rules.remove(selectedMarker, rules.WHITE_MARKER)) {
-					System.err.println("HERRO1?");
 					nodes[selectedMarker].removePlayer();
 					removePhase = false;
 				}
 			}
 			if (rules.getPlayerInTurn() == rules.BLACK_MOVES) {
 				if (rules.remove(selectedMarker, rules.BLACK_MARKER)) {
-					System.err.println("HERRO2?");
 					nodes[selectedMarker].removePlayer();
 					removePhase = false;
 				}
@@ -295,10 +301,8 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 						canvas.drawText("Select a black marker to move!", (float) X_RESOLUTION / 2,
 								Y_RESOLUTION * 0.10f, paint);
 					}
-				}
-				if (hasSelectedMarker && !hasSelectedDestination) {
-					canvas.drawText("Select a node to move this marker to!", (float) X_RESOLUTION / 2,
-							Y_RESOLUTION * 0.10f, paint);
+				} else if (hasSelectedMarker && !hasSelectedDestination) {
+					canvas.drawText("Select a node to move to!", (float) X_RESOLUTION / 2, Y_RESOLUTION * 0.10f, paint);
 				}
 
 			}

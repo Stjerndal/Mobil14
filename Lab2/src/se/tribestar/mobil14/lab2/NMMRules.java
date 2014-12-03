@@ -99,6 +99,8 @@ public class NMMRules {
 		To = V.convert(To);
 		From = V.convert(From);
 
+		System.err.println("From " + From + " to " + To);
+
 		if (color == turn) {
 			if (turn == BLACK_MOVES) {
 				if (blackmarker >= 0) {
@@ -235,8 +237,11 @@ public class NMMRules {
 	 * Check whether this is a legal move.
 	 */
 	private boolean isValidMove(int to, int from) {
-		to = V.convert(to);
-		from = V.convert(from);
+
+		// to = V.convert(to);
+		// from = V.convert(from);
+
+		System.err.println("From " + from + " to " + to);
 
 		if (this.gameplan[to] != EMPTY_SPACE)
 			return false;
