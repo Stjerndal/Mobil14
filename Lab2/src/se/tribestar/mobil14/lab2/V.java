@@ -2,17 +2,19 @@ package se.tribestar.mobil14.lab2;
 
 import android.util.Log;
 
+//Small helper class
 public class V {
 	public final static boolean DEBUG = true;
 	public final static String TAG = "LAB2";
 
+	// Simplified log method.
 	public static void log(String msg) {
 		if (DEBUG)
 			Log.d(TAG, msg);
 	}
 
 	/**
-	 * Convert i from logical index to weird rule index.
+	 * Convert i from logical index to weird NMMRules index.
 	 */
 	public static int convert(int i) {
 		switch (i) {
