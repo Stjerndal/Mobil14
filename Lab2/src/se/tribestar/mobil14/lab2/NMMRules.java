@@ -1,5 +1,13 @@
 package se.tribestar.mobil14.lab2;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+
+import android.content.Context;
+
 /**
  * @author Jonas Wåhslén, jwi@kth.se. Revised by Anders Lindström,
  *         anderslm@kth.se
@@ -25,11 +33,63 @@ public class NMMRules {
 
 	public static final int UNPLACED = -1;
 
+	private static final String FILE_NAME = "nmmstate";
+
 	public NMMRules() {
 		gameplan = new int[25]; // zeroes
 		whitemarker = 9;
 		blackmarker = 9;
 		turn = WHITE_MOVES;
+	}
+
+	public void saveStateToFile(Context context) {
+		FileOutputStream outputStream;
+
+		StringBuilder sb = new StringBuilder();
+		for (int m : gameplan) {
+			sb.append(m + " ");
+		}
+		sb.append('\n');
+		sb.append(whitemarker);
+		sb.append('\n');
+		sb.append(blackmarker);
+		sb.append('\n');
+		sb.append(turn);
+
+		try {
+			outputStream = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+			outputStream.write(sb.toString().getBytes());
+			outputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void loadStateFromFile(Context context) {
+		File file = new File(context.getFilesDir(), FILE_NAME);
+		StringBuilder sb = new StringBuilder();
+
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String line;
+
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+				sb.append('\n');
+			}
+		} catch (IOException e) {
+		}
+
+		String[] data = sb.toString().split("\n");
+		String[] nodes = data[0].split(" ");
+		for (int i = 0; i < gameplan.length; ++i) {
+			gameplan[i] = Integer.valueOf(nodes[i]);
+		}
+
+		whitemarker = Integer.valueOf(data[1]);
+		blackmarker = Integer.valueOf(data[2]);
+		turn = Integer.valueOf(data[3]);
+
 	}
 
 	/**
