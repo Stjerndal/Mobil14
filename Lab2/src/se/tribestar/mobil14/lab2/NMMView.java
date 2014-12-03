@@ -260,12 +260,10 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 			if (placePhase && !removePhase) {
 				if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
-					canvas.drawText("White's turn to place (" + whiteMarkersToPlace + " left)",
-							(float) X_RESOLUTION / 2, Y_RESOLUTION * 0.10f, paint);
+					showStatusText("White's turn to place (" + whiteMarkersToPlace + " left)", canvas, paint);
 				}
 				if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
-					canvas.drawText("Blacks's turn to place (" + blackMarkersToPlace + " left)",
-							(float) X_RESOLUTION / 2, Y_RESOLUTION * 0.10f, paint);
+					showStatusText("Blacks's turn to place (" + blackMarkersToPlace + " left)", canvas, paint);
 				}
 
 			}
@@ -274,12 +272,10 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				if (!hasSelectedMarker) {
 
 					if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
-						canvas.drawText("Select a white marker to remove!", (float) X_RESOLUTION / 2,
-								Y_RESOLUTION * 0.10f, paint);
+						showStatusText("Select a white marker to remove!", canvas, paint);
 					}
 					if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
-						canvas.drawText("Select a black marker to remove!", (float) X_RESOLUTION / 2,
-								Y_RESOLUTION * 0.10f, paint);
+						showStatusText("Select a black marker to remove!", canvas, paint);
 					}
 
 				} else {
@@ -290,15 +286,13 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 				if (!hasSelectedMarker && !hasSelectedDestination) {
 					if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
-						canvas.drawText("Select a white marker to move!", (float) X_RESOLUTION / 2,
-								Y_RESOLUTION * 0.10f, paint);
+						showStatusText("Select a white marker to move!", canvas, paint);
 					}
 					if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
-						canvas.drawText("Select a black marker to move!", (float) X_RESOLUTION / 2,
-								Y_RESOLUTION * 0.10f, paint);
+						showStatusText("Select a black marker to move!", canvas, paint);
 					}
 				} else if (hasSelectedMarker && !hasSelectedDestination) {
-					canvas.drawText("Select a node to move to!", (float) X_RESOLUTION / 2, Y_RESOLUTION * 0.10f, paint);
+					showStatusText("Select a node to move to!", canvas, paint);
 				}
 
 			}
@@ -344,6 +338,16 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		if (graphicsThread != null) {
 			graphicsThread.onWindowResize(w, h);
 		}
+	}
+
+	public void showStatusText(String msg, Canvas canvas, Paint paint) {
+		paint.setColor(Color.RED);
+		paint.setTextAlign(Align.CENTER);
+		paint.setTextSize((int) ((double) X_RESOLUTION) / 19);
+		paint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
+
+		canvas.drawText(msg, (float) X_RESOLUTION / 2, Y_RESOLUTION * 0.10f, paint);
+
 	}
 
 	public void updateNodes() {
