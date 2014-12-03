@@ -26,13 +26,13 @@ public class NodeRectCalculator {
 		int nodeIndx = 0; // 0-23
 		// loop through every one of the 49 possible node positions
 		for (int i = 0; i < 7; ++i) {
-			float left = x + i * rectSize;
-			float right = left + rectSize;
+			float top = y + i * rectSize;
+			float bottom = top + rectSize;
 			for (int j = 0; j < 7; ++j, ++indx) {
 				// only add the node if it is one of the 24 valid positions.
 				if (realIndices[nodeIndx] == indx) {
-					float top = y + j * rectSize;
-					float bottom = top + rectSize;
+					float left = x + j * rectSize;
+					float right = left + rectSize;
 					Rect rect = new Rect((int) left, (int) top, (int) right, (int) bottom);
 					nodes[nodeIndx] = new Node(rect);
 					nodeIndx++;
