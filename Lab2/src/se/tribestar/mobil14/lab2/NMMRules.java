@@ -102,12 +102,14 @@ public class NMMRules {
 	 * Returns true if a move is successful
 	 */
 	public boolean legalMove(int To, int From, int color) {
+		V.log("From " + From + " to " + To);
 		To = V.convert(To);
 		From = V.convert(From);
+		V.log("From " + From + " to " + To);
 
 		if (color == turn) {
 			if (turn == BLACK_MOVES) {
-				if (blackmarker >= 0) {
+				if (blackmarker > 0) {
 					if (gameplan[To] == EMPTY_SPACE) {
 						gameplan[To] = BLACK_MARKER;
 						blackmarker--;
@@ -116,10 +118,11 @@ public class NMMRules {
 					}
 				}
 				/* else */
-				if (gameplan[To] == EMPTY_SPACE) {
+				else if (gameplan[To] == EMPTY_SPACE) {
 					boolean valid = isValidMove(To, From);
 					if (valid == true) {
 						gameplan[To] = BLACK_MARKER;
+						gameplan[From] = EMPTY_SPACE;
 						turn = WHITE_MOVES;
 						return true;
 					} else {
@@ -129,18 +132,18 @@ public class NMMRules {
 					return false;
 				}
 			} else {
-				if (whitemarker >= 0) {
+				if (whitemarker > 0) {
 					if (gameplan[To] == EMPTY_SPACE) {
 						gameplan[To] = WHITE_MARKER;
 						whitemarker--;
 						turn = BLACK_MOVES;
 						return true;
 					}
-				}
-				if (gameplan[To] == EMPTY_SPACE) {
+				} else if (gameplan[To] == EMPTY_SPACE) {
 					boolean valid = isValidMove(To, From);
 					if (valid == true) {
 						gameplan[To] = WHITE_MARKER;
+						gameplan[From] = EMPTY_SPACE;
 						turn = BLACK_MOVES;
 						return true;
 					} else {
@@ -153,6 +156,7 @@ public class NMMRules {
 		} else {
 			return false;
 		}
+		return false;
 	}
 
 	/**
@@ -241,8 +245,9 @@ public class NMMRules {
 	 * Check whether this is a legal move.
 	 */
 	private boolean isValidMove(int to, int from) {
-		to = V.convert(to);
-		from = V.convert(from);
+
+		// to = V.convert(to);
+		// from = V.convert(from);
 
 		if (this.gameplan[to] != EMPTY_SPACE)
 			return false;

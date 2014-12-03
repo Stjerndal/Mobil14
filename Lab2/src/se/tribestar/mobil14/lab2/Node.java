@@ -63,15 +63,10 @@ public class Node {
 	}
 
 	public boolean removePlayer() {
-		if (hasPlayer) {
-			sprite = null;
-			playerColor = 0;
-			hasPlayer = false;
-			return true;
-		}
+		sprite = null;
+		playerColor = rules.EMPTY_SPACE;
 		hasPlayer = false;
-		return false;
-
+		return hasPlayer;
 	}
 
 	public boolean isWithinBounds(int x, int y) {
