@@ -28,7 +28,11 @@ public class GraphicsThread extends Thread {
 			view.move();
 			// view.checkForHit();
 
-			view.draw();
+			try {
+				view.draw();
+			} catch (NullPointerException e) {
+				V.log("Nullpointer exception when drawing.");
+			}
 
 			// Wait for some time
 			try {
