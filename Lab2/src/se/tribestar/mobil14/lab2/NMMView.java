@@ -152,14 +152,10 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 						}
 
 					} else {
-						V.log("HELLO? " + node.getPlayerColor());
-						V.log("HELLO? " + rules.getPlayerInTurn());
 						if (node.getPlayerColor() == rules.getPlayerInTurn()) {
-							V.log("HELLO?1");
 							selectedMarker = i;
 							hasSelectedMarker = true;
 						} else if (!node.hasPlayer() && hasSelectedMarker && !hasSelectedDestination) {
-							V.log("HELLO?2");
 							selectedDestination = i;
 							hasSelectedDestination = true;
 						}
@@ -315,18 +311,27 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				}
 			}
 
-			// if (graphicsThread.isRunning() == false) {
-			//
-			// paint.setColor(Color.RED);
-			// paint.setTextAlign(Align.CENTER);
-			// paint.setTextSize(42);
-			// paint.setTypeface(Typeface.create(Typeface.SERIF,
-			// Typeface.BOLD));
-			// canvas.drawText("Game Over", (float) X_RESOLUTION / 2, (float)
-			// Y_RESOLUTION / 2, paint);
-			// }
+			int winner = checkGameOver();
+			if ((winner == NMMRules.WHITE_MOVES || winner == NMMRules.BLACK_MOVES) && !placePhase) {
 
-			// TODO Draw phase-dependant messages
+				paint = new Paint();
+				paint.setColor(getResources().getColor(R.color.board_bg));
+				canvas.drawPaint(paint);
+
+				paint.setColor(Color.RED);
+				paint.setTextAlign(Align.CENTER);
+				paint.setTextSize(42);
+				paint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
+
+				if (winner == NMMRules.WHITE_MOVES) {
+					canvas.drawText("GAME OVER! White wins!", (float) X_RESOLUTION / 2, Y_RESOLUTION / 2, paint);
+				}
+
+				if (winner == NMMRules.BLACK_MOVES) {
+					canvas.drawText("GAME OVER! Black wins!", (float) X_RESOLUTION / 2, Y_RESOLUTION / 2, paint);
+				}
+
+			}
 		}
 		holder.unlockCanvasAndPost(canvas);
 	}
@@ -363,5 +368,16 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	public void saveState() {
 		V.log("save state method called");
 		rules.saveStateToFile(context);
+	}
+
+	public int checkGameOver() {
+		if (rules.win(NMMRules.WHITE_MOVES)) {
+			return NMMRules.WHITE_MOVES;
+		}
+		if (rules.win(NMMRules.BLACK_MOVES)) {
+			return NMMRules.BLACK_MOVES;
+		}
+
+		return 0;
 	}
 }
