@@ -95,6 +95,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		requestFocus();
 	}
 
+	// life cycle method
 	public void resume() {
 
 		if (graphicsThread == null) {
@@ -110,6 +111,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		updateNodes();
 	}
 
+	// life cycle method
 	public void pause() {
 		if (graphicsThread != null) {
 			Log.i("BounceSurfaceView", "pause");
@@ -119,6 +121,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		saveState();
 	}
 
+	// start a new game
 	public void restart() {
 		V.log("restart");
 		graphicsThread = new GraphicsThread(this, 20); // 20 ms between
@@ -392,6 +395,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 	}
 
+	// Update node objects based on the board in the NMMRules.
 	public void updateNodes() {
 		for (int i = 0; i < nodes.length; i++) {
 			nodes[i].setPlayer(rules.board(i));
