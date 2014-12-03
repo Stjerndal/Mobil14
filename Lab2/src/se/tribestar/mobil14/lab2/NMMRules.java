@@ -55,6 +55,18 @@ public class NMMRules {
 		sb.append(blackmarker);
 		sb.append('\n');
 		sb.append(turn);
+		sb.append('\n');
+		sb.append(NMMView.whiteMarkersToPlace);
+		sb.append('\n');
+		sb.append(NMMView.blackMarkersToPlace);
+		sb.append('\n');
+		sb.append(NMMView.hasSelectedMarker);
+		sb.append('\n');
+		sb.append(NMMView.hasSelectedDestination);
+		sb.append('\n');
+		sb.append(NMMView.placePhase);
+		sb.append('\n');
+		sb.append(NMMView.removePhase);
 
 		try {
 			outputStream = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
@@ -82,7 +94,7 @@ public class NMMRules {
 			return false;
 		}
 
-		if (lines < 2)
+		if (lines < 10)
 			return false;
 
 		String[] data = sb.toString().split("\n");
@@ -94,6 +106,12 @@ public class NMMRules {
 		whitemarker = Integer.valueOf(data[1]);
 		blackmarker = Integer.valueOf(data[2]);
 		turn = Integer.valueOf(data[3]);
+		NMMView.whiteMarkersToPlace = Integer.valueOf(data[4]);
+		NMMView.blackMarkersToPlace = Integer.valueOf(data[5]);
+		NMMView.hasSelectedMarker = Boolean.valueOf(data[6]);
+		NMMView.hasSelectedDestination = Boolean.valueOf(data[7]);
+		NMMView.placePhase = Boolean.valueOf(data[8]);
+		NMMView.removePhase = Boolean.valueOf(data[9]);
 
 		return true;
 	}

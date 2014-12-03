@@ -36,14 +36,14 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	private int selectedMarker;
 	private int selectedDestination;
 
-	private int whiteMarkersToPlace;
-	private int blackMarkersToPlace;
+	public static int whiteMarkersToPlace;
+	public static int blackMarkersToPlace;
 
-	private boolean hasSelectedMarker;
-	private boolean hasSelectedDestination;
+	public static boolean hasSelectedMarker;
+	public static boolean hasSelectedDestination;
 
-	private boolean placePhase;
-	private boolean removePhase;
+	public static boolean placePhase;
+	public static boolean removePhase;
 
 	private Context context;
 
