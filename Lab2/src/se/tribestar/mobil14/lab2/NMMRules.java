@@ -42,9 +42,12 @@ public class NMMRules {
 		turn = WHITE_MOVES;
 	}
 
+	// Save the game state to file
 	public void saveStateToFile(Context context) {
 		FileOutputStream outputStream;
 
+		// create a large string to save
+		// each line representing a specific part of the game state
 		StringBuilder sb = new StringBuilder();
 		for (int m : gameplan) {
 			sb.append(m + " ");
@@ -77,6 +80,7 @@ public class NMMRules {
 		}
 	}
 
+	// load game state from file
 	public boolean loadStateFromFile(Context context) {
 		File file = new File(context.getFilesDir(), FILE_NAME);
 		StringBuilder sb = new StringBuilder();
@@ -98,11 +102,12 @@ public class NMMRules {
 			return false;
 
 		String[] data = sb.toString().split("\n");
-		String[] nodes = data[0].split(" ");
+		String[] nodes = data[0].split(" "); // populate the gameplan
 		for (int i = 0; i < gameplan.length; ++i) {
 			gameplan[i] = Integer.valueOf(nodes[i]);
 		}
 
+		// load all the other game state properties.
 		whitemarker = Integer.valueOf(data[1]);
 		blackmarker = Integer.valueOf(data[2]);
 		turn = Integer.valueOf(data[3]);
