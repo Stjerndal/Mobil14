@@ -235,94 +235,94 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	protected void draw() {
 		// TO DO: Draw on an off screen Bitmap before
 		// calling holder.lockCanvas()
-		try {
+		// try {
 
-			Canvas canvas = holder.lockCanvas();
-			{
-				// Paint the background
-				Paint paint = new Paint();
-				paint.setColor(getResources().getColor(R.color.board_bg));
-				canvas.drawPaint(paint);
+		Canvas canvas = holder.lockCanvas();
+		{
+			// Paint the background
+			Paint paint = new Paint();
+			paint.setColor(getResources().getColor(R.color.board_bg));
+			canvas.drawPaint(paint);
 
-				// boardPic.setBounds(new Rect((int) 0, (int) 50, (int) 0 +
-				// boardPic.getIntrinsicWidth(), (int) 50
-				// + boardPic.getIntrinsicHeight()));
-				// boardPic.draw(canvas);
-				boardSprite.draw(canvas);
+			// boardPic.setBounds(new Rect((int) 0, (int) 50, (int) 0 +
+			// boardPic.getIntrinsicWidth(), (int) 50
+			// + boardPic.getIntrinsicHeight()));
+			// boardPic.draw(canvas);
+			boardSprite.draw(canvas);
 
-				paint.setColor(Color.RED);
-				paint.setTextAlign(Align.CENTER);
-				paint.setTextSize(42);
-				paint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
+			paint.setColor(Color.RED);
+			paint.setTextAlign(Align.CENTER);
+			paint.setTextSize(42);
+			paint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
 
-				int winner = checkGameOver();
-				if ((winner == NMMRules.WHITE_MOVES || winner == NMMRules.BLACK_MOVES) && !placePhase) {
+			int winner = checkGameOver();
+			if ((winner == NMMRules.WHITE_MOVES || winner == NMMRules.BLACK_MOVES) && !placePhase) {
 
-					if (winner == NMMRules.WHITE_MOVES) {
-						showStatusText("GAME OVER! White wins!", canvas, paint);
+				if (winner == NMMRules.WHITE_MOVES) {
+					showStatusText("GAME OVER! White wins!", canvas, paint);
+				}
+
+				if (winner == NMMRules.BLACK_MOVES) {
+					showStatusText("GAME OVER! Black wins!", canvas, paint);
+				}
+
+			} else {
+
+				if (placePhase && !removePhase) {
+					if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
+						showStatusText("White's turn to place (" + whiteMarkersToPlace + " left)", canvas, paint);
 					}
-
-					if (winner == NMMRules.BLACK_MOVES) {
-						showStatusText("GAME OVER! Black wins!", canvas, paint);
+					if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
+						showStatusText("Blacks's turn to place (" + blackMarkersToPlace + " left)", canvas, paint);
 					}
+				}
 
-				} else {
+				if (removePhase) {
 
-					if (placePhase && !removePhase) {
+					if (!hasSelectedMarker) {
+
 						if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
-							showStatusText("White's turn to place (" + whiteMarkersToPlace + " left)", canvas, paint);
+							showStatusText("Select a white marker to remove!", canvas, paint);
 						}
 						if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
-							showStatusText("Blacks's turn to place (" + blackMarkersToPlace + " left)", canvas, paint);
+							showStatusText("Select a black marker to remove!", canvas, paint);
 						}
+
+					} else {
+
 					}
 
-					if (removePhase) {
+				} else if (!placePhase && !removePhase) {
 
-						if (!hasSelectedMarker) {
-
-							if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
-								showStatusText("Select a white marker to remove!", canvas, paint);
-							}
-							if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
-								showStatusText("Select a black marker to remove!", canvas, paint);
-							}
-
-						} else {
-
+					if (!hasSelectedMarker && !hasSelectedDestination) {
+						if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
+							showStatusText("Select a white marker to move!", canvas, paint);
 						}
-
-					} else if (!placePhase && !removePhase) {
-
-						if (!hasSelectedMarker && !hasSelectedDestination) {
-							if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
-								showStatusText("Select a white marker to move!", canvas, paint);
-							}
-							if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
-								showStatusText("Select a black marker to move!", canvas, paint);
-							}
-						} else if (hasSelectedMarker && !hasSelectedDestination) {
-							showStatusText("Select a node to move to!", canvas, paint);
+						if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
+							showStatusText("Select a black marker to move!", canvas, paint);
 						}
-
+					} else if (hasSelectedMarker && !hasSelectedDestination) {
+						showStatusText("Select a node to move to!", canvas, paint);
 					}
+
 				}
-				// Draw the movables
-				for (Node node : nodes) {
-					try {
-						node.getSprite().draw(canvas);
-					} catch (Exception e) {
+			}
+			// Draw the movables
+			for (Node node : nodes) {
+				try {
+					node.getSprite().draw(canvas);
+				} catch (Exception e) {
 
-					}
 				}
-
 			}
 
-			holder.unlockCanvasAndPost(canvas);
-
-		} catch (NullPointerException e) {
-			V.log("Nullpointer Exception, graphicsthread probably being closed");
 		}
+
+		holder.unlockCanvasAndPost(canvas);
+
+		// } catch (NullPointerException e) {
+		// V.log("Nullpointer Exception, graphicsthread probably being closed");
+		// }
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
