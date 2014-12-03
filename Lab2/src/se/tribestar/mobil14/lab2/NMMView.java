@@ -138,7 +138,6 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			for (int i = 0; i < nodes.length; i++) {
 				Node node = nodes[i];
 				if (node.isWithinBounds(x, y)) {
-
 					if (placePhase && !removePhase) {
 						if (node.getPlayerColor() == NMMRules.EMPTY_SPACE) {
 							selectedDestination = i;
@@ -153,10 +152,14 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 						}
 
 					} else {
+						V.log("HELLO? " + node.getPlayerColor());
+						V.log("HELLO? " + rules.getPlayerInTurn());
 						if (node.getPlayerColor() == rules.getPlayerInTurn()) {
+							V.log("HELLO?1");
 							selectedMarker = i;
 							hasSelectedMarker = true;
 						} else if (!node.hasPlayer() && hasSelectedMarker && !hasSelectedDestination) {
+							V.log("HELLO?2");
 							selectedDestination = i;
 							hasSelectedDestination = true;
 						}

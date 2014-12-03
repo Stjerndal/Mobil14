@@ -28,8 +28,8 @@ public class NMMRules {
 	public static final int BLACK_MOVES = 2;
 
 	public static final int EMPTY_SPACE = 0;
-	public static final int WHITE_MARKER = 4;
-	public static final int BLACK_MARKER = 5;
+	public static final int WHITE_MARKER = WHITE_MOVES;
+	public static final int BLACK_MARKER = BLACK_MOVES;
 
 	public static final int UNPLACED = -1;
 
