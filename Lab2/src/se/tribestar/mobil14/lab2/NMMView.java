@@ -207,7 +207,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 		} else if (hasSelectedMarker && hasSelectedDestination && !removePhase) {
 			int playerInTurn = rules.getPlayerInTurn();
-			if (rules.legalMove(selectedMarker, selectedDestination, playerInTurn)) {
+			if (rules.legalMove(selectedDestination, selectedMarker, playerInTurn)) {
 
 				nodes[selectedMarker].removePlayer();
 				nodes[selectedDestination].setPlayer(playerInTurn);
