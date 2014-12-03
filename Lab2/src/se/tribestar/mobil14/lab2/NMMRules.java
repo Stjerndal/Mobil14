@@ -65,20 +65,25 @@ public class NMMRules {
 		}
 	}
 
-	public void loadStateFromFile(Context context) {
+	public boolean loadStateFromFile(Context context) {
 		File file = new File(context.getFilesDir(), FILE_NAME);
 		StringBuilder sb = new StringBuilder();
-
+		int lines = 0;
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String line;
 
 			while ((line = br.readLine()) != null) {
+				lines++;
 				sb.append(line);
 				sb.append('\n');
 			}
 		} catch (IOException e) {
+			return false;
 		}
+
+		if (lines < 2)
+			return false;
 
 		String[] data = sb.toString().split("\n");
 		String[] nodes = data[0].split(" ");
@@ -90,6 +95,7 @@ public class NMMRules {
 		blackmarker = Integer.valueOf(data[2]);
 		turn = Integer.valueOf(data[3]);
 
+		return true;
 	}
 
 	/**
