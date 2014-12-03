@@ -36,14 +36,14 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	private int selectedMarker;
 	private int selectedDestination;
 
-	private int whiteMarkersToPlace;
-	private int blackMarkersToPlace;
+	public static int whiteMarkersToPlace;
+	public static int blackMarkersToPlace;
 
-	private boolean hasSelectedMarker;
-	private boolean hasSelectedDestination;
+	public static boolean hasSelectedMarker;
+	public static boolean hasSelectedDestination;
 
-	private boolean placePhase;
-	private boolean removePhase;
+	public static boolean placePhase;
+	public static boolean removePhase;
 
 	private Context context;
 
@@ -138,7 +138,6 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			for (int i = 0; i < nodes.length; i++) {
 				Node node = nodes[i];
 				if (node.isWithinBounds(x, y)) {
-
 					if (placePhase && !removePhase) {
 						if (node.getPlayerColor() == NMMRules.EMPTY_SPACE) {
 							selectedDestination = i;
@@ -190,11 +189,13 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				} else if (playerInTurn == NMMRules.BLACK_MOVES && blackMarkersToPlace > 0) {
 					blackMarkersToPlace--;
 					nodes[selectedDestination].setPlayer(playerInTurn);
-				} else if (whiteMarkersToPlace <= 0 && blackMarkersToPlace <= 0) {
-					placePhase = false;
+				} else {
 					hasSelectedDestination = false;
 					return;
-				} else {
+				}
+
+				if (whiteMarkersToPlace <= 0 && blackMarkersToPlace <= 0) {
+					placePhase = false;
 					hasSelectedDestination = false;
 					return;
 				}
@@ -205,7 +206,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 		} else if (hasSelectedMarker && hasSelectedDestination && !removePhase) {
 			int playerInTurn = rules.getPlayerInTurn();
-			if (rules.legalMove(selectedMarker, selectedDestination, playerInTurn)) {
+			if (rules.legalMove(selectedDestination, selectedMarker, playerInTurn)) {
 
 				nodes[selectedMarker].removePlayer();
 				nodes[selectedDestination].setPlayer(playerInTurn);
@@ -218,14 +219,12 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 			if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
 				if (rules.remove(selectedMarker, NMMRules.WHITE_MARKER)) {
-					System.err.println("HERRO1?");
 					nodes[selectedMarker].removePlayer();
 					removePhase = false;
 				}
 			}
 			if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
 				if (rules.remove(selectedMarker, NMMRules.BLACK_MARKER)) {
-					System.err.println("HERRO2?");
 					nodes[selectedMarker].removePlayer();
 					removePhase = false;
 				}
@@ -306,18 +305,27 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				}
 			}
 
-			// if (graphicsThread.isRunning() == false) {
-			//
-			// paint.setColor(Color.RED);
-			// paint.setTextAlign(Align.CENTER);
-			// paint.setTextSize(42);
-			// paint.setTypeface(Typeface.create(Typeface.SERIF,
-			// Typeface.BOLD));
-			// canvas.drawText("Game Over", (float) X_RESOLUTION / 2, (float)
-			// Y_RESOLUTION / 2, paint);
-			// }
+			int winner = checkGameOver();
+			if ((winner == NMMRules.WHITE_MOVES || winner == NMMRules.BLACK_MOVES) && !placePhase) {
 
-			// TODO Draw phase-dependant messages
+				paint = new Paint();
+				paint.setColor(getResources().getColor(R.color.board_bg));
+				canvas.drawPaint(paint);
+
+				paint.setColor(Color.RED);
+				paint.setTextAlign(Align.CENTER);
+				paint.setTextSize(42);
+				paint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
+
+				if (winner == NMMRules.WHITE_MOVES) {
+					canvas.drawText("GAME OVER! White wins!", (float) X_RESOLUTION / 2, Y_RESOLUTION / 2, paint);
+				}
+
+				if (winner == NMMRules.BLACK_MOVES) {
+					canvas.drawText("GAME OVER! Black wins!", (float) X_RESOLUTION / 2, Y_RESOLUTION / 2, paint);
+				}
+
+			}
 		}
 		holder.unlockCanvasAndPost(canvas);
 	}
@@ -364,5 +372,16 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	public void saveState() {
 		V.log("save state method called");
 		rules.saveStateToFile(context);
+	}
+
+	public int checkGameOver() {
+		if (rules.win(NMMRules.WHITE_MOVES)) {
+			return NMMRules.WHITE_MOVES;
+		}
+		if (rules.win(NMMRules.BLACK_MOVES)) {
+			return NMMRules.BLACK_MOVES;
+		}
+
+		return 0;
 	}
 }
