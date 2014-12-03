@@ -45,8 +45,11 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	private boolean placePhase;
 	private boolean removePhase;
 
+	private Context context;
+
 	public NMMView(Context context, int xRes, int yRes) {
 		super(context);
+		this.context = context;
 
 		// SurfaceView specific initialization
 		holder = getHolder();
@@ -90,6 +93,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public void resume() {
+
 		if (graphicsThread == null) {
 			Log.i("BounceSurfaceView", "resume");
 			graphicsThread = new GraphicsThread(this, 20); // 20 ms between
@@ -98,6 +102,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				graphicsThread.start();
 			}
 		}
+		loadState();
 	}
 
 	public void pause() {
@@ -106,6 +111,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			graphicsThread.requestExitAndWait();
 			graphicsThread = null;
 		}
+		saveState();
 	}
 
 	public void restart() {
@@ -341,5 +347,15 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		if (graphicsThread != null) {
 			graphicsThread.onWindowResize(w, h);
 		}
+	}
+
+	public void loadState() {
+		V.log("load state method called");
+		rules.loadStateFromFile(context);
+	}
+
+	public void saveState() {
+		V.log("save state method called");
+		rules.saveStateToFile(context);
 	}
 }
