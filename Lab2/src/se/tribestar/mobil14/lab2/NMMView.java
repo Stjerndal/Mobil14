@@ -148,8 +148,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 						if (node.getPlayerColor() == rules.getPlayerInTurn()) {
 							selectedMarker = i;
 							hasSelectedMarker = true;
-						} else if (node.getPlayerColor() == rules.EMPTY_SPACE && hasSelectedMarker
-								&& !hasSelectedDestination) {
+						} else if (!node.hasPlayer() && hasSelectedMarker && !hasSelectedDestination) {
 							selectedDestination = i;
 							hasSelectedDestination = true;
 						}
@@ -187,11 +186,13 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 					blackMarkersToPlace--;
 					nodes[selectedDestination].setPlayer(
 							new Sprite(x, y, blackMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f), playerInTurn);
-				} else if (whiteMarkersToPlace <= 0 && blackMarkersToPlace <= 0) {
-					placePhase = false;
+				} else {
 					hasSelectedDestination = false;
 					return;
-				} else {
+				}
+
+				if (whiteMarkersToPlace <= 0 && blackMarkersToPlace <= 0) {
+					placePhase = false;
 					hasSelectedDestination = false;
 					return;
 				}
@@ -206,6 +207,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				int x = nodes[selectedDestination].getRect().left;
 				int y = nodes[selectedDestination].getRect().top;
 				nodes[selectedMarker].removePlayer();
+
 				if (playerInTurn == rules.WHITE_MOVES) {
 					nodes[selectedDestination].setPlayer(
 							new Sprite(x, y, whiteMarker, X_RESOLUTION, Y_RESOLUTION, 0.1f), playerInTurn);
@@ -221,7 +223,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 
 			hasSelectedMarker = false;
 			hasSelectedDestination = false;
-		} else if (removePhase && hasSelectedMarker && !hasSelectedDestination) {
+		} else if (removePhase && hasSelectedMarker) {
 
 			if (rules.getPlayerInTurn() == rules.WHITE_MOVES) {
 				if (rules.remove(selectedMarker, rules.WHITE_MARKER)) {
