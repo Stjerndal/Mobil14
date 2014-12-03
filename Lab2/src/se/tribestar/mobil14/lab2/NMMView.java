@@ -159,9 +159,6 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 							selectedDestination = i;
 							hasSelectedDestination = true;
 						}
-
-						// TODO -- Insert some animation or something to let the
-						// user know it made som action
 						break;
 					}
 

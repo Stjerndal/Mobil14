@@ -234,31 +234,31 @@ public class NMMRules {
 	}
 
 	/**
-	 * Returns true if the selected player have less than three markers left.
+	 * Returns true if the selected player has won the game.
 	 */
 	public boolean win(int color) {
+
+		int otherPlayer = 0;
+		if (color == WHITE_MOVES) {
+			otherPlayer = BLACK_MOVES;
+		}
+		if (color == BLACK_MOVES) {
+			otherPlayer = WHITE_MOVES;
+		}
+
 		int countMarker = 0;
 		int count = 0;
 		while (count < 23) {
-			if (gameplan[count] != EMPTY_SPACE && gameplan[count] != color)
+			if (gameplan[count] != EMPTY_SPACE && gameplan[count] == otherPlayer)
 				countMarker++;
 			count++;
 		}
 		if (whitemarker <= 0 && blackmarker <= 0 && countMarker < 3) {
 			return true;
 		} else {
-
-			int otherPlayer = 0;
-			if (color == WHITE_MOVES) {
-				otherPlayer = BLACK_MOVES;
-			}
-			if (color == BLACK_MOVES) {
-				otherPlayer = WHITE_MOVES;
-			}
-
-			for (int i = 0; gameplan.length < i; i++) {
+			for (int i = 0; i < gameplan.length; i++) {
 				if (gameplan[i] == otherPlayer) {
-					for (int j = 0; gameplan.length < j; j++) {
+					for (int j = 0; j < gameplan.length; j++) {
 						if (isValidMove(j, i)) {
 							return false;
 						}
