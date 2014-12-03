@@ -2,17 +2,20 @@ package se.tribestar.mobil14.lab2;
 
 import android.graphics.Rect;
 
+/**
+ * A position on the NMM Board.
+ * 
+ */
 public class Node {
 
-	private Sprite sprite;
-	private boolean hasPlayer;
+	private Sprite sprite; // visual documentation
+	private boolean hasPlayer; // is occupied?
 
-	private int playerColor;
+	private int playerColor; // occupied by what color?
 
-	private Rect bounds;
+	private Rect bounds; // pixel bounds
 
-	private NMMRules rules = new NMMRules();
-
+	// New node using rect bounds
 	public Node(Rect rect) {
 		this.bounds = rect;
 		this.sprite = null;
@@ -24,6 +27,7 @@ public class Node {
 		return playerColor;
 	}
 
+	// mark the node by one player (or as empty)
 	public boolean setPlayer(int color) {
 		if (color == NMMRules.EMPTY_SPACE) {
 			hasPlayer = false;
@@ -44,6 +48,7 @@ public class Node {
 
 	}
 
+	// Set the sprite to be either empty or as a gamepiece
 	private void setSprite(int color) {
 		if (color == NMMRules.EMPTY_SPACE)
 			sprite = null;
@@ -64,11 +69,12 @@ public class Node {
 
 	public boolean removePlayer() {
 		sprite = null;
-		playerColor = rules.EMPTY_SPACE;
+		playerColor = NMMRules.EMPTY_SPACE;
 		hasPlayer = false;
 		return hasPlayer;
 	}
 
+	// check if two coordinates are within the bounds of the node
 	public boolean isWithinBounds(int x, int y) {
 		if (bounds.contains(x, y))
 			return true;
