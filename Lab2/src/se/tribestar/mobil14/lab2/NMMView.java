@@ -72,6 +72,9 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		initGame();
 	}
 
+	/**
+	 * This method will initiate a completely new game
+	 */
 	private void initGame() {
 
 		for (Node node : nodes) {
@@ -138,24 +141,31 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			for (int i = 0; i < nodes.length; i++) {
 				Node node = nodes[i];
 				if (node.isWithinBounds(x, y)) {
+					// If we're placing we want to check for a destination
 					if (placePhase && !removePhase) {
 						if (node.getPlayerColor() == NMMRules.EMPTY_SPACE) {
 							selectedDestination = i;
 							hasSelectedDestination = true;
 						}
-
+						// Else if we're trying to remove, check for a marker
 					} else if (removePhase) {
-
+						// make sure that the node has a marker and that it is
+						// the right color
 						if (node.hasPlayer() && node.getPlayerColor() == rules.getPlayerInTurn()) {
 							selectedMarker = i;
 							hasSelectedMarker = true;
 						}
 
 					} else {
+						// else if we're moving
 						if (node.getPlayerColor() == rules.getPlayerInTurn()) {
+							// if we clicked one of our own markers we want it
+							// to be selected
 							selectedMarker = i;
 							hasSelectedMarker = true;
 						} else if (!node.hasPlayer() && hasSelectedMarker && !hasSelectedDestination) {
+							// else if we already selected one of our markers,
+							// check for a destination
 							selectedDestination = i;
 							hasSelectedDestination = true;
 						}
@@ -173,24 +183,32 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		return false;
 	}
 
+	/**
+	 * Handles all logic
+	 */
 	protected void move() {
-
+		// Check if we're still placing nodes and has selected a destination
+		// node for placement
 		if (placePhase && hasSelectedDestination && !removePhase) {
 			int playerInTurn = rules.getPlayerInTurn();
+			// if successfully placed a node at the given spot
 			if (rules.legalMove(selectedDestination, NMMRules.UNPLACED, playerInTurn)) {
+				// check if it's part of 3-in-row
 				removePhase = rules.remove(selectedDestination);
 
 				if (playerInTurn == NMMRules.WHITE_MOVES && whiteMarkersToPlace > 0) {
+					// if we had markers left, set a marker
 					whiteMarkersToPlace--;
 					nodes[selectedDestination].setPlayer(playerInTurn);
 				} else if (playerInTurn == NMMRules.BLACK_MOVES && blackMarkersToPlace > 0) {
+					// if we had markers left, set a marker
 					blackMarkersToPlace--;
 					nodes[selectedDestination].setPlayer(playerInTurn);
 				} else {
 					hasSelectedDestination = false;
 					return;
 				}
-
+				// check if we're done with the placing phase
 				if (whiteMarkersToPlace <= 0 && blackMarkersToPlace <= 0) {
 					placePhase = false;
 					hasSelectedDestination = false;
@@ -198,30 +216,43 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				}
 
 			}
-
 			hasSelectedDestination = false;
-
-		} else if (hasSelectedMarker && hasSelectedDestination && !removePhase) {
+		}
+		// Check whether we are in the move-phase and has selected from and
+		// destination nodes
+		else if (hasSelectedMarker && hasSelectedDestination && !removePhase) {
 			int playerInTurn = rules.getPlayerInTurn();
 			if (rules.legalMove(selectedDestination, selectedMarker, playerInTurn)) {
 
+				// if the move was successful we want to remove our player from
+				// the node
 				nodes[selectedMarker].removePlayer();
+				// we also want to add a player-marker to the destination
 				nodes[selectedDestination].setPlayer(playerInTurn);
+				// then check if it was part of 3-in-row
 				removePhase = rules.remove(selectedDestination);
 			}
 
 			hasSelectedMarker = false;
 			hasSelectedDestination = false;
-		} else if (removePhase && hasSelectedMarker) {
+		}
+		// if we're trying to remove a node and has a marker selected
+		else if (removePhase && hasSelectedMarker) {
 
 			if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
 				if (rules.remove(selectedMarker, NMMRules.WHITE_MARKER)) {
+					// Note: the players turn's have already switched so the
+					// above statement is infact correct
+					// if we can remove it, then do so
 					nodes[selectedMarker].removePlayer();
 					removePhase = false;
 				}
 			}
 			if (rules.getPlayerInTurn() == NMMRules.BLACK_MOVES) {
 				if (rules.remove(selectedMarker, NMMRules.BLACK_MARKER)) {
+					// Note: the players turn's have already switched so the
+					// above statement is infact correct
+					// if we can remove it, then do so
 					nodes[selectedMarker].removePlayer();
 					removePhase = false;
 				}
@@ -256,6 +287,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 			paint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
 
 			int winner = checkGameOver();
+			// If the game is over and we have a winner
 			if ((winner == NMMRules.WHITE_MOVES || winner == NMMRules.BLACK_MOVES) && !placePhase) {
 
 				if (winner == NMMRules.WHITE_MOVES) {
@@ -267,7 +299,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 				}
 
 			} else {
-
+				// If we are still placing markers
 				if (placePhase && !removePhase) {
 					if (rules.getPlayerInTurn() == NMMRules.WHITE_MOVES) {
 						showStatusText("White's turn to place (" + whiteMarkersToPlace + " left)", canvas, paint);
@@ -276,7 +308,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 						showStatusText("Blacks's turn to place (" + blackMarkersToPlace + " left)", canvas, paint);
 					}
 				}
-
+				// If we need to remove a marker
 				if (removePhase) {
 
 					if (!hasSelectedMarker) {
@@ -291,7 +323,7 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 					} else {
 
 					}
-
+					// if we're looking to make a move
 				} else if (!placePhase && !removePhase) {
 
 					if (!hasSelectedMarker && !hasSelectedDestination) {
@@ -343,6 +375,13 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	/**
+	 * Scalable text-messages
+	 * 
+	 * @param msg
+	 * @param canvas
+	 * @param paint
+	 */
 	public void showStatusText(String msg, Canvas canvas, Paint paint) {
 		paint.setColor(Color.RED);
 		paint.setTextAlign(Align.CENTER);
@@ -369,6 +408,11 @@ public class NMMView extends SurfaceView implements SurfaceHolder.Callback {
 		rules.saveStateToFile(context);
 	}
 
+	/**
+	 * return the player who has won the game or 0 if no player won the game
+	 * 
+	 * @return
+	 */
 	public int checkGameOver() {
 		if (rules.win(NMMRules.WHITE_MOVES)) {
 			return NMMRules.WHITE_MOVES;
