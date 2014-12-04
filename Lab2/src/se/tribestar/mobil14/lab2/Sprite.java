@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
-//class to represent a sprite 
+//class to represent a sprite
 public class Sprite {
 	private int posX, posY; // pixel position
 	private Drawable sprite; // a representation of the icon image
