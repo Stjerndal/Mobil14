@@ -35,7 +35,8 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 			InputStream is = socket.getInputStream();
 			OutputStream os = socket.getOutputStream();
 
-			os.write(FORMAT);
+			// os.write(FORMAT);
+			os.write(SELECT_FORMAT);
 			os.flush();
 			byte[] reply = new byte[1];
 			is.read(reply);
