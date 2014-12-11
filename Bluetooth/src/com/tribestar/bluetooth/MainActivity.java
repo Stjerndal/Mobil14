@@ -11,6 +11,7 @@ import android.widget.ToggleButton;
 public class MainActivity extends Activity {
 
 	private Thread bluetoothReceiver;
+	private Thread serverSender;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,9 @@ public class MainActivity extends Activity {
 
 	public void onSendDataToServerClicked(View view) {
 		showToast("Contacting server");
+		serverSender = new ServerSender("data", this);
+		serverSender.start();
+
 	}
 
 	private void showToast(String msg) {
@@ -62,4 +66,15 @@ public class MainActivity extends Activity {
 		toast.show();
 	}
 
+	@Override
+	protected void onDestroy() {
+		try {
+			((BluetoothReceiver) bluetoothReceiver).cancel();
+			bluetoothReceiver.interrupt();
+		} catch (Exception e) {
+			((ServerSender) serverSender).closeAll();
+			serverSender.interrupt();
+		}
+		super.onDestroy();
+	}
 }
