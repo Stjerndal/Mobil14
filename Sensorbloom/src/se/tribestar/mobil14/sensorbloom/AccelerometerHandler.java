@@ -14,10 +14,15 @@ public class AccelerometerHandler implements SensorEventListener {
 	boolean shaking;
 	boolean shakeCompleted;
 
-	double checkShakeInterval = 100; // Check for shakes every 100ms
+	// Check for shakes every 100ms
+	private static final double checkShakeInterval = 100;
 	double lastUpdate = 0f;
 
-	private static final int SHAKE_THRESHOLD = 400;
+	private static final float F = 0.75f; // Filterfaktorn
+	// Min speed to start shaking
+	private static final int SHAKE_START_SPEED = 300;
+	// Max speed to stop shaking
+	private static final int SHAKE_STOP_SPEED = 50;
 
 	public AccelerometerHandler(Context context) {
 		SensorManager manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -31,8 +36,12 @@ public class AccelerometerHandler implements SensorEventListener {
 	}
 
 	public void onSensorChanged(SensorEvent event) {
+		float newX = filteredValue(accelX, event.values[0]);
+		float newY = filteredValue(accelY, event.values[1]);
+		float newZ = filteredValue(accelZ, event.values[2]);
+
 		if (!shakeCompleted) {
-			shaking = checkShake(event.values[0], event.values[1], event.values[2]);
+			shaking = checkShake(newX, newY, newZ);
 			if (shaking) { // Check if shaked for more than 1 s
 				if (System.currentTimeMillis() - shakeStartTime > 1000) {
 					shakeCompleted = true;
@@ -40,31 +49,49 @@ public class AccelerometerHandler implements SensorEventListener {
 				}
 			}
 		}
-		accelX = event.values[0];
-		accelY = event.values[1];
-		accelZ = event.values[2];
 
+		accelX = newX;
+		accelY = newY;
+		accelZ = newZ;
+
+		// accelX = event.values[0];
+		// accelY = event.values[1];
+		// accelZ = event.values[2];
+
+	}
+
+	private float filteredValue(float prevValue, float sensorValue) {
+		return F * prevValue + (1 - F) * sensorValue;
 	}
 
 	private boolean checkShake(float newX, float newY, float newZ) {
 		double curTime = System.currentTimeMillis();
-		if ((curTime - lastUpdate) > 80) {
+		if ((curTime - lastUpdate) > checkShakeInterval) {
 			double diffTime = (curTime - lastUpdate);
 			lastUpdate = curTime;
 			double speed = Math.abs(newX + newY + newZ - accelX - accelY - accelZ) / diffTime * 10000;
-			if (speed > SHAKE_THRESHOLD) {
-				V.log("shake!! speed: " + speed);
+			if (speed > SHAKE_START_SPEED) {
+				V.log("shake!! speed: " + speed + ": " + shaking);
 				if (!shaking) {
 					shakeStartTime = curTime;
 					V.log("Shake for first time");
 				}
 				return true;
 			} else {
-				return false;
+
+				if (shaking && speed < SHAKE_STOP_SPEED) {
+					V.log("Noke!! speed: " + speed + ": " + shaking);
+					return false;
+				} else
+					return shaking;
 			}
 		} else {
 			return shaking;
 		}
+	}
+
+	public boolean getShakeCompleted() {
+		return shakeCompleted;
 	}
 
 	public float getAccelX() {

@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -45,16 +44,6 @@ public class FlowerSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
 		flower = new Flower(context, xRes, yRes);
 
-		// Drawable d =
-		// Drawable.createFromStream(context.getAssets().open("Cloths/btn_no.png"),
-		// null);
-
-		// flowerPic =
-		// context.getResources().getDrawable(R.drawable.nmm_flower);
-		// flowerSprite = new Sprite(0, 0, flowerPic, X_RESOLUTION,
-		// Y_RESOLUTION, 0.9f);
-		// flowerSprite.setPositionCenter();
-
 		accHandler = new AccelerometerHandler(context);
 
 		slVelocity = 4.0F;
@@ -66,7 +55,6 @@ public class FlowerSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	private void initGame() {
 		movingRight = movingLeft = false;
 
-		// NB!! Need this for capturing key events
 		setFocusable(true);
 		requestFocus();
 	}
@@ -93,14 +81,12 @@ public class FlowerSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
 	}
 
-	public boolean onTouchEvent(MotionEvent event) {
-		flower.explode();
-		return false;
-	}
+	// public boolean onTouchEvent(MotionEvent event) {
+	// flower.explode();
+	// return false;
+	// }
 
 	protected void draw(float deltaTime) {
-		// TO DO: Draw on an off screen Bitmap before
-		// calling holder.lockCanvas()
 
 		Canvas canvas = holder.lockCanvas();
 		{
@@ -109,25 +95,9 @@ public class FlowerSurfaceView extends SurfaceView implements SurfaceHolder.Call
 			paint.setColor(getResources().getColor(R.color.flower_bg));
 			canvas.drawPaint(paint);
 
-			// Draw the movables
-			// slMovable.draw(canvas);
-			// for (MovableIcon m : snowList) {
-			// m.draw(canvas);
-			// }
-			// flowerSprite.draw(canvas);
-			// flower.getSprite(accHandler.getAccelX()).draw(canvas);
-
+			if (accHandler.getShakeCompleted())
+				flower.explode();
 			flower.draw(accHandler.getAccelX(), canvas, deltaTime);
-
-			if (graphicsThread.isRunning() == false) {
-				// paint.setColor(Color.RED);
-				// paint.setTextAlign(Align.CENTER);
-				// paint.setTextSize(42);
-				// paint.setTypeface(Typeface.create(Typeface.SERIF,
-				// Typeface.BOLD));
-				// canvas.drawText("All traffic canceled", (float) X_RESOLUTION
-				// / 2, (float) Y_RESOLUTION / 2, paint);
-			}
 		}
 		holder.unlockCanvasAndPost(canvas);
 	}
