@@ -1,15 +1,19 @@
-package se.tribestar.mobil14.lab2;
+package com.tribestar.bluetooth;
+
+import android.view.View;
 
 public class GraphicsThread extends Thread {
 
-	private NMMView view;
+	private View view;
 	private long sleepTime;
 	private boolean running;
+	private byte[] buffer;
 
-	GraphicsThread(NMMView view, long sleepTime) {
+	GraphicsThread(View view, long sleepTime) {
 		this.view = view;
 		this.sleepTime = sleepTime;
 		this.running = true;
+		this.buffer = new byte[0];
 	}
 
 	protected synchronized void setRunning(boolean b) {
@@ -25,13 +29,13 @@ public class GraphicsThread extends Thread {
 		while (running) {
 
 			// view.generateSnow();
-			view.move();
+			// view.move();
 			// view.checkForHit();
 
 			try {
-				view.draw();
+				// view.draw();
 			} catch (NullPointerException e) {
-				V.log("Nullpointer exception when drawing.");
+				// V.log("Nullpointer exception when drawing.");
 			}
 
 			// Wait for some time
@@ -52,5 +56,9 @@ public class GraphicsThread extends Thread {
 
 	void onWindowResize(int w, int h) {
 		// Deal with change in surface size
+	}
+
+	void postByteBuffer(byte[] buffer) {
+		this.buffer = buffer;
 	}
 }

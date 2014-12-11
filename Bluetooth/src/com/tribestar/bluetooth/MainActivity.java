@@ -1,16 +1,22 @@
 package com.tribestar.bluetooth;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
+
+	private Thread bluetoothReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
 	}
 
 	@Override
@@ -31,4 +37,29 @@ public class MainActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	public void onToggleClicked(View view) {
+		// Is the toggle on?
+		boolean on = ((ToggleButton) view).isChecked();
+		if (on) {
+			bluetoothReceiver = new BluetoothReceiver("data", this);
+			bluetoothReceiver.start();
+			// showToast("Now downloading");
+
+		} else {
+			((BluetoothReceiver) bluetoothReceiver).cancel();
+			bluetoothReceiver.interrupt();
+			// showToast("Stopped downloading");
+		}
+	}
+
+	public void onSendDataToServerClicked(View view) {
+		showToast("Contacting server");
+	}
+
+	private void showToast(String msg) {
+		Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+		toast.show();
+	}
+
 }
