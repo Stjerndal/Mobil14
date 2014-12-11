@@ -1,11 +1,13 @@
 package com.tribestar.bluetooth;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -62,6 +64,27 @@ public class ServerSender extends Thread {
 			notifyUIThread("ServerSender cancelled");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void makeTestFile() {
+		FileOutputStream outputStream;
+		String string = "";
+		try {
+			outputStream = activity.openFileOutput(filename, Context.MODE_PRIVATE);
+			int pleth = 0;
+			int pulse = 0;
+			outputStream.write(("" + System.currentTimeMillis() + "\n").getBytes());
+			outputStream.write("Pleth\tPulse".getBytes());
+			int i = 0;
+			while (i < 10) {
+
+				i++;
+			}
+			outputStream.write(string.getBytes());
+			outputStream.close();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
