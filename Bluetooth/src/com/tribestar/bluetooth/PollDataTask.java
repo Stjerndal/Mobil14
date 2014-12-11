@@ -1,4 +1,4 @@
-package se.kth.anderslm.noninsensortest;
+package com.tribestar.bluetooth;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -41,17 +41,12 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 			is.read(reply);
 
 			if (reply[0] == ACK) {
-				// byte[] frame = new byte[4];
-				// this -obsolete- format specifies 4 bytes per frame
-				byte[] frame = new byte[FRAME_SIZE];
+				byte[] frame = new byte[4]; // this -obsolete- format specifies
+											// 4 bytes per frame
 				is.read(frame);
-				int value0 = unsignedByteToInt(frame[0]); // 01
-				int value1 = unsignedByteToInt(frame[1]); // STATUS
-				int value2 = unsignedByteToInt(frame[2]); // PLETH
-				int value3 = unsignedByteToInt(frame[3]); // PRMSB
-				int value4 = unsignedByteToInt(frame[4]); // CHK
-
-				output = value0 + "; " + value1 + value2 + "; " + value3 + value4 + "\r\n";
+				int value1 = unsignedByteToInt(frame[1]);
+				int value2 = unsignedByteToInt(frame[2]);
+				output = value1 + "; " + value2 + "\r\n";
 			}
 		} catch (Exception e) {
 			output = e.getMessage();
@@ -71,13 +66,11 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 	 */
 	@Override
 	protected void onPostExecute(String output) {
-		activity.displayData(output);
+		// activity.displayData(output);
 	}
 
 	// The byte sequence to set sensor to a basic, and obsolete, format
 	private static final byte[] FORMAT = { 0x44, 0x31 };
-	private static final byte[] SELECT_FORMAT = { 0x02, 0x70, 0x04, 0x02, 0x0D, 0x00, (byte) 0x83, 0x03 };
-	private static final byte FRAME_SIZE = 5;
 	private static final byte ACK = 0x06; // ACK from Nonin sensor
 
 	private static final UUID STANDARD_SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
