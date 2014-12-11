@@ -77,7 +77,8 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 
 	// The byte sequence to set sensor to a basic, and obsolete, format
 	private static final byte[] FORMAT = { 0x44, 0x31 };
-	private static final byte[] SELECT_FORMAT = { 0x02, 0x70, 0x04, 0x02, 0x0D, 0x00, (byte) 0x83, 0x03 };
+	// Select format 2:
+	private static final byte[] SELECT_FORMAT = { 0x02, 0x70, 0x04, 0x02, 0x02, 0x00, (byte) 0x78, 0x03 };
 	private static final byte FRAME_SIZE = 5;
 	private static final byte ACK = 0x06; // ACK from Nonin sensor
 
