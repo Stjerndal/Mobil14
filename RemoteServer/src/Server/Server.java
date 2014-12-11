@@ -1,8 +1,10 @@
 package Server;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -39,42 +41,46 @@ public class Server {
 
 	private class NewClient extends Thread {
 		Socket clientSocket;
-		BufferedReader in;
-		PrintWriter out;
 
 		public NewClient(Socket clientSocket) {
+
 			this.clientSocket = clientSocket;
-			try {
 
-				this.out = new PrintWriter(clientSocket.getOutputStream(), true);
-				this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				System.out.println(clientSocket.getInetAddress() + " connected..");
-				out.println("Welcome to Måns test server 2.0;  " + clientSocket.getInetAddress()
-						+ ", you are now connected");
-
-			} catch (IOException e) {
-				System.err.println("Something went wrong when trying to connect " + clientSocket.getInetAddress());
-			}
 			start();
 
 		}
 
 		public void run() {
+			System.out.println(clientSocket.getInetAddress() + " connected..");
+			File file = new File("SensorData.txt");
 
-			String inputLine;
+			System.out.println("Writing file: " + file.getAbsolutePath());
 			try {
+				// file.createNewFile(); // For some reason this needs to be
+				// done
 
-				while ((inputLine = in.readLine()) != null) {
-					spreadMessage(inputLine);
-					// System.out.println("Client("+clientSocket.getInetAddress()+") said: "
-					// + inputLine);
+				byte[] bytes = new byte[1024];
+				FileOutputStream fos = new FileOutputStream(file);
+				InputStream is = clientSocket.getInputStream();
+				BufferedInputStream bis = new BufferedInputStream(is);
+				// BufferedOutputStream out = new
+				// BufferedOutputStream(clientSocket.getOutputStream());
+				System.out.println(file.length());
+				int count;
+				while ((count = bis.read(bytes)) > 0) {
+					fos.write(bytes, 0, count);
+					System.out.println(count);
 				}
+
+				fos.flush();
+				// clientSocket.close();
 
 			} catch (IOException e) {
 				clientSockets.remove(this);
 				System.out.println(clientSocket.getInetAddress() + " has left. no of clients: " + clientSockets.size());
-				// e.printStackTrace();
+				e.printStackTrace();
 			}
+			System.out.println("Received file");
 		}
 
 		private void spreadMessage(String message) throws IOException {

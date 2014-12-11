@@ -12,6 +12,7 @@ public class MainActivity extends Activity {
 
 	private Thread bluetoothReceiver;
 	private Thread serverSender;
+	private String filename = "SensorData.txt";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class MainActivity extends Activity {
 		// Is the toggle on?
 		boolean on = ((ToggleButton) view).isChecked();
 		if (on) {
-			bluetoothReceiver = new BluetoothReceiver("data", this);
+			bluetoothReceiver = new BluetoothReceiver(filename, this);
 			bluetoothReceiver.start();
 			// showToast("Now downloading");
 
@@ -56,7 +57,7 @@ public class MainActivity extends Activity {
 
 	public void onSendDataToServerClicked(View view) {
 		showToast("Contacting server");
-		serverSender = new ServerSender("data", this);
+		serverSender = new ServerSender(filename, this);
 		serverSender.start();
 
 	}
