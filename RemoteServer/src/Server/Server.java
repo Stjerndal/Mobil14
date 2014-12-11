@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Vector;
@@ -83,13 +82,5 @@ public class Server {
 			System.out.println("Received file");
 		}
 
-		private void spreadMessage(String message) throws IOException {
-			PrintWriter tempOut;
-			for (int i = 0; i < clientSockets.size(); i++) {
-				tempOut = new PrintWriter(clientSockets.get(i).clientSocket.getOutputStream(), true);
-				tempOut.println("Client(" + clientSocket.getInetAddress() + ") said: " + message);
-				System.out.println(message);
-			}
-		}
 	}
 }
