@@ -52,7 +52,7 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 				int value3 = unsignedByteToInt(frame[3]); // PRMSB
 				int value4 = unsignedByteToInt(frame[4]); // CHK
 
-				output = value0 + "; " + value1 + value2 + "; " + value3 + value4 + "\r\n";
+				output = value0 + "; " + value1 + "; " + value2 + "; " + value3 + "; " + value4 + "\r\n";
 			}
 		} catch (Exception e) {
 			output = e.getMessage();
