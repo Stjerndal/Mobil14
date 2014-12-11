@@ -64,11 +64,10 @@ public class Server {
 				BufferedInputStream bis = new BufferedInputStream(is);
 				// BufferedOutputStream out = new
 				// BufferedOutputStream(clientSocket.getOutputStream());
-				System.out.println(file.length());
 				int count;
 				while ((count = bis.read(bytes)) > 0) {
 					fos.write(bytes, 0, count);
-					System.out.println(count);
+					System.out.println("Read " + count + " bytes");
 				}
 
 				fos.flush();
