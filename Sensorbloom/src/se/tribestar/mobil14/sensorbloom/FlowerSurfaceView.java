@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -73,8 +74,7 @@ public class FlowerSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	public void resume() {
 		if (graphicsThread == null) {
 			Log.i("BounceSurfaceView", "resume");
-			graphicsThread = new GraphicsThread(this, 20); // 20 ms between
-															// updates
+			graphicsThread = new GraphicsThread(this, 2); // 30 fps
 			if (hasSurface) {
 				graphicsThread.start();
 			}
@@ -93,7 +93,12 @@ public class FlowerSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
 	}
 
-	protected void draw() {
+	public boolean onTouchEvent(MotionEvent event) {
+		flower.explode();
+		return false;
+	}
+
+	protected void draw(float deltaTime) {
 		// TO DO: Draw on an off screen Bitmap before
 		// calling holder.lockCanvas()
 
@@ -110,7 +115,9 @@ public class FlowerSurfaceView extends SurfaceView implements SurfaceHolder.Call
 			// m.draw(canvas);
 			// }
 			// flowerSprite.draw(canvas);
-			flower.getSprite(accHandler.getAccelX()).draw(canvas);
+			// flower.getSprite(accHandler.getAccelX()).draw(canvas);
+
+			flower.draw(accHandler.getAccelX(), canvas, deltaTime);
 
 			if (graphicsThread.isRunning() == false) {
 				// paint.setColor(Color.RED);

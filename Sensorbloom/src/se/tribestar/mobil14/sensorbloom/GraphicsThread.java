@@ -5,8 +5,10 @@ class GraphicsThread extends Thread {
 	private FlowerSurfaceView view;
 	private long sleepTime;
 	private boolean running;
+	float startTime = 0f;
 
 	GraphicsThread(FlowerSurfaceView view, long sleepTime) {
+		startTime = System.nanoTime();
 		this.view = view;
 		this.sleepTime = sleepTime;
 		this.running = true;
@@ -23,9 +25,10 @@ class GraphicsThread extends Thread {
 	public void run() {
 
 		while (running) {
-
+			float deltaTime = (System.nanoTime() - startTime) / 1000000000.0f; // sec
+			startTime = System.nanoTime();
 			view.move();
-			view.draw();
+			view.draw(deltaTime);
 
 			// Wait for some time
 			try {
