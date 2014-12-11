@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical" android:padding="10sp">
+
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/textView1"
+		android:text="DERP" android:textSize="16sp"
+		android:paddingBottom="5sp"></TextView>
+	<ImageView android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:src="@drawable/sl_logo"
+		android:id="@+id/imageView1" android:paddingLeft="0sp"
+		android:paddingBottom="10sp"></ImageView>
+
+
+	<LinearLayout android:id="@+id/linearLayout1"
+		android:layout_width="wrap_content" android:orientation="horizontal"
+		android:paddingLeft="10sp" android:layout_height="wrap_content">
+
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/StartButton"
+			android:text="Start game" android:onClick="onStartClick"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/FinishButton"
+			android:text="Exit" android:onClick="onExitClick"></Button>
+	</LinearLayout>
+</LinearLayout>
