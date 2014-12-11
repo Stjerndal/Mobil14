@@ -7,10 +7,61 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.tribestar.bluetooth.MainActivity" >
+    
+    
+    
+    <ListView
+	 android:id="@+id/list"
+	 android:layout_width="match_parent"
+	 android:layout_height="wrap_content"
+	 android:layout_alignParentRight="true"
+	 android:layout_alignParentTop="true"
+	 android:layout_marginTop="36dp" >
+	 </ListView>
 
-    <TextView
+    <RelativeLayout
+        android:id="@+id/buttonlayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:indeterminate="true" >
+
+	    <ToggleButton
+	        android:id="@+id/toggleButton1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginBottom="213dp"
+	        android:textOn="Stop downloading"
+	   	    android:textOff="Start downloading"
+	        android:onClick="onToggleClicked"/>
+	
+	    <TextView
+	        android:id="@+id/textView2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="84dp"
+	        android:text="TextView" />
+	
+	    <Button
+	        android:id="@+id/button1"
+	        style="?android:attr/buttonStyleSmall"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/toggleButton1"
+	        android:layout_alignRight="@+id/toggleButton1"
+	        android:layout_alignTop="@+id/toggleButton1"
+	        android:layout_marginTop="106dp"
+	        android:text="Send data to server" 
+			android:onClick="onSendDataToServerClicked"/>
+
+
+	    
+    </RelativeLayout>
 
 </RelativeLayout>
