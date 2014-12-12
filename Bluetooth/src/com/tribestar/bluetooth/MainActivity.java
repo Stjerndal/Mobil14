@@ -102,7 +102,9 @@ public class MainActivity extends Activity {
 		try {
 			// ((BluetoothReceiver) bluetoothReceiver).cancel();
 			// bluetoothReceiver.interrupt();
-			pollData.cancel(true);
+			if (pollData != null) {
+				pollData.cancel(true);
+			}
 		} catch (Exception e) {
 			((ServerSender) serverSender).closeAll();
 			serverSender.interrupt();
