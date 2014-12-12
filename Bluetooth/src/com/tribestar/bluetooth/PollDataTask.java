@@ -20,6 +20,7 @@ class PollDataTask extends Thread {
 	OutputStream os = null;
 	PrintWriter pw = null;
 	BluetoothSocket socket = null;
+	int pulse;
 
 	protected PollDataTask(MainActivity activity, BluetoothDevice noninDevice, String filename) {
 		this.activity = activity;
@@ -47,6 +48,7 @@ class PollDataTask extends Thread {
 			is = socket.getInputStream();
 			os = socket.getOutputStream();
 			pw = new PrintWriter(new FileOutputStream(new File(filename)));
+			pw.write("Pulse\tPleth\n");
 
 			V.log("Streamed");
 			// os.write(FORMAT);
@@ -103,12 +105,13 @@ class PollDataTask extends Thread {
 							// " byte" + frame[3]);
 							msb = msb << 7;
 							// V.log("msbnew: " + msb);
-							int pulse = lsb + msb;
+							pulse = lsb + msb;
 							if (pulse > 20 && pulse < 200) {
-								String out = "pulse: " + pulse;
-								V.log(out);
-								writeToScreen(out);
-								pw.write(out);
+								int pleth = value2;
+								// String out = pulse + "\t" + pleth + "\n";
+								V.log("pulse: " + pulse + " pleth: " + pleth);
+								writeToScreen("Pulse:" + pulse);
+								pw.write(pulse + "\t" + pleth + "\n");
 								pw.flush();
 							}
 

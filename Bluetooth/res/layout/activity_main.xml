@@ -10,15 +10,6 @@
     
     
     
-    <ListView
-	 android:id="@+id/list"
-	 android:layout_width="match_parent"
-	 android:layout_height="wrap_content"
-	 android:layout_alignParentRight="true"
-	 android:layout_alignParentTop="true"
-	 android:layout_marginTop="36dp" >
-	 </ListView>
-
     <RelativeLayout
         android:id="@+id/buttonlayout"
         android:layout_width="wrap_content"
@@ -45,8 +36,10 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_centerHorizontal="true"
+	        android:layout_gravity="center"
+	        android:gravity="center"
 	        android:layout_marginTop="84dp"
-	        android:text="TextView" />
+	        android:text="Pulse:\nXX bmp" />
 	
 	    <Button
 	        android:id="@+id/button1"
