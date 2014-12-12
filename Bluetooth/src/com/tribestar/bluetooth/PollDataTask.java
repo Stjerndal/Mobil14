@@ -7,10 +7,9 @@ import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.os.AsyncTask;
 import android.os.Environment;
 
-class PollDataTask extends AsyncTask<Void, Void, String> {
+class PollDataTask extends Thread {
 	private String filename;
 	InputStream is = null;
 	OutputStream os = null;
@@ -27,7 +26,7 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 	 * A simple example: poll one frame of data from the Nonin sensor
 	 */
 	@Override
-	protected String doInBackground(Void... v) {
+	public void run() {
 		String output = "";
 		V.log("Starting background");
 
@@ -88,11 +87,10 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 			}
 		}
 
-		return output;
+		// return output;
 	}
 
-	@Override
-	protected void onCancelled() {
+	public void cancel() {
 		try {
 			is.close();
 			os.close();
@@ -100,15 +98,6 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 
 		} catch (Exception e) {
 		}
-		super.onCancelled();
-	}
-
-	/**
-	 * update the UI (executed on the main thread)
-	 */
-	@Override
-	protected void onPostExecute(String output) {
-		// activity.displayData(output);
 	}
 
 	// The byte sequence to set sensor to a basic, and obsolete, format

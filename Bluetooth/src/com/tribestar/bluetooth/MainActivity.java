@@ -14,8 +14,8 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
 
-	// private Thread bluetoothReceiver;
-	private PollDataTask pollData;
+	private Thread bluetoothReceiver;
+	// private PollDataTask pollData;
 	private Thread serverSender;
 	private String filename = "SensorData.txt";
 	private BluetoothAdapter bluetoothAdapter;
@@ -58,9 +58,6 @@ public class MainActivity extends Activity {
 		// Is the toggle on?
 		boolean on = ((ToggleButton) view).isChecked();
 		if (on) {
-			// bluetoothReceiver = new BluetoothReceiver(filename, this);
-			// bluetoothReceiver.start();
-			// showToast("Now downloading");
 
 			Set<BluetoothDevice> pairedBTDevices = bluetoothAdapter.getBondedDevices();
 			if (pairedBTDevices.size() > 0) {
@@ -78,17 +75,21 @@ public class MainActivity extends Activity {
 				V.log("POST LOOP");
 			}
 
-			V.log("BG init");
-			pollData = new PollDataTask(this, noninDevice, filename);
-			V.log("BG exec...");
-			pollData.execute();
-			V.log("Executed.");
+			bluetoothReceiver = new PollDataTask(this, noninDevice, filename);
+			bluetoothReceiver.start();
+			showToast("Now downloading");
+
+			// V.log("BG init");
+			// pollData = new PollDataTask(this, noninDevice, filename);
+			// V.log("BG exec...");
+			// pollData.execute();
+			// V.log("Executed.");
 
 		} else {
-			// ((BluetoothReceiver) bluetoothReceiver).cancel();
-			// bluetoothReceiver.interrupt();
-			// showToast("Stopped downloading");
-			pollData.cancel(true);
+			((BluetoothReceiver) bluetoothReceiver).cancel();
+			bluetoothReceiver.interrupt();
+			showToast("Stopped downloading");
+			// pollData.cancel(true);
 		}
 	}
 
@@ -107,11 +108,11 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		try {
-			// ((BluetoothReceiver) bluetoothReceiver).cancel();
-			// bluetoothReceiver.interrupt();
-			if (pollData != null) {
-				pollData.cancel(true);
-			}
+			((BluetoothReceiver) bluetoothReceiver).cancel();
+			bluetoothReceiver.interrupt();
+			// if (pollData != null) {
+			// pollData.cancel(true);
+			// }
 		} catch (Exception e) {
 			((ServerSender) serverSender).closeAll();
 			serverSender.interrupt();
