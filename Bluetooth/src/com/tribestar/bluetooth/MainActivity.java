@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		try {
-			((BluetoothReceiver) bluetoothReceiver).cancel();
+			((PollDataTask) bluetoothReceiver).cancel();
 			bluetoothReceiver.interrupt();
 			// if (pollData != null) {
 			// pollData.cancel(true);
