@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Environment;
+import android.widget.Toast;
 
 class PollDataTask extends Thread {
 	private String filename;
@@ -130,6 +131,26 @@ class PollDataTask extends Thread {
 
 		} catch (Exception e) {
 		}
+	}
+
+	private void notifyUIThread(final String message) {
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				V.log("Toasted the UI thread with: " + message);
+				Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
+	private void writeToScreen(final String message) {
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				//V.log("Toasted the UI thread with: " + message);
+				//Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+				(TextView) view = activity.findViewById(R.id.textView2);
+				
+			}
+		});
 	}
 
 	// The byte sequence to set sensor to a basic, and obsolete, format
