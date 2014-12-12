@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 public class ServerSender extends Thread {
 	private String filename;
-	private String address = "192.168.1.2";
+	private String address = "130.229.131.255";
 	private int port = 11111;
 	private Activity activity;
 	private Socket socket;
