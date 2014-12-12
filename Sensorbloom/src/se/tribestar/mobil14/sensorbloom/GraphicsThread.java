@@ -1,5 +1,8 @@
 package se.tribestar.mobil14.sensorbloom;
 
+/**
+ * Based on course SurfaceView example.
+ */
 class GraphicsThread extends Thread {
 
 	private FlowerSurfaceView view;
@@ -27,7 +30,6 @@ class GraphicsThread extends Thread {
 		while (running) {
 			float deltaTime = (System.nanoTime() - startTime) / 1000000000.0f; // sec
 			startTime = System.nanoTime();
-			view.move();
 			view.draw(deltaTime);
 
 			// Wait for some time

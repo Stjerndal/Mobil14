@@ -6,13 +6,18 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+/**
+ * Class for handling device accelerometer. Based on suggestions from the book
+ * Beginning Android games.
+ * 
+ */
 public class AccelerometerHandler implements SensorEventListener {
 	float accelX;
 	float accelY;
 	float accelZ;
-	double shakeStartTime = Float.MAX_VALUE;
-	boolean shaking;
-	boolean shakeCompleted;
+	double shakeStartTime = Float.MAX_VALUE; // When a shake is started
+	boolean shaking; // are we shaking right now?
+	boolean shakeCompleted; // have we completed a shake?
 
 	// Check for shakes every 100ms
 	private static final double checkShakeInterval = 100;
@@ -64,23 +69,29 @@ public class AccelerometerHandler implements SensorEventListener {
 		return F * prevValue + (1 - F) * sensorValue;
 	}
 
+	/**
+	 * Check for shake. Field 'shaking' is updated once every checkShakeInterval
+	 * ms.
+	 */
 	private boolean checkShake(float newX, float newY, float newZ) {
 		double curTime = System.currentTimeMillis();
 		if ((curTime - lastUpdate) > checkShakeInterval) {
 			double diffTime = (curTime - lastUpdate);
 			lastUpdate = curTime;
+			// shakespeed:
 			double speed = Math.abs(newX + newY + newZ - accelX - accelY - accelZ) / diffTime * 10000;
+			// enough speed:
 			if (speed > SHAKE_START_SPEED) {
 				V.log("shake!! speed: " + speed + ": " + shaking);
-				if (!shaking) {
+				if (!shaking) { // if beginning a new shake
 					shakeStartTime = curTime;
 					V.log("Shake for first time");
 				}
 				return true;
+				// not enough speed:
 			} else {
-
+				// make it easier to continously shake.
 				if (shaking && speed < SHAKE_STOP_SPEED) {
-					V.log("Noke!! speed: " + speed + ": " + shaking);
 					return false;
 				} else
 					return shaking;

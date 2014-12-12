@@ -6,6 +6,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
+/**
+ * Class for handling the flower. It keeps track of all sprites, and draws the
+ * correct ones based on provided accelerometer data and whether explosion
+ * should be triggered
+ */
 public class Flower {
 
 	private Sprite[][] sprites;
@@ -14,12 +19,15 @@ public class Flower {
 
 	private static final int numTypes = 5;
 
-	private static final int TYPE_LEFT = 0;
+	// Differend types of sprites
+	private static final int TYPE_LEFT = 0; // base sprites leaning to the left
 	private static final int TYPE_RIGHT = 1;
+	// attached flower petals leaning to the left :
 	private static final int TYPE_LEFTBLADE = 2;
 	private static final int TYPE_RIGHTBLADE = 3;
 	private static final int TYPE_EXPLOSION = 4;
 
+	// image file names
 	private static final String[] filenames = { "flower_left", "flower_right", "blades_left", "blades_right",
 			"explosion" };
 
@@ -27,7 +35,8 @@ public class Flower {
 	private int xRes, yRes;
 
 	private boolean exploded = false; // Have we exploded?
-	private float explFrameTime = 0f;
+	private float explFrameTime = 0f; // For deciding which animation frame to
+										// show.
 
 	public Flower(Context context, int xRes, int yRes) {
 		this.context = context;
@@ -43,6 +52,8 @@ public class Flower {
 		loadSprites();
 	}
 
+	// Draw correct sprites based on accelerometer data and if we should explode
+	// flower petals
 	public void draw(float accelX, Canvas canvas, float deltaTime) {
 		int baseType = (accelX <= 0f) ? TYPE_RIGHT : TYPE_LEFT;
 		int bladeType = (accelX <= 0f) ? TYPE_RIGHTBLADE : TYPE_LEFTBLADE;
@@ -62,11 +73,15 @@ public class Flower {
 
 	}
 
+	/**
+	 * Start explode animation next draw().
+	 */
 	public void explode() {
 		V.log("EXPLODE!");
 		exploded = true;
 	}
 
+	// Load sprites.
 	private void loadSprites() {
 		try {
 			for (int type = 0; type < numTypes; type++) {

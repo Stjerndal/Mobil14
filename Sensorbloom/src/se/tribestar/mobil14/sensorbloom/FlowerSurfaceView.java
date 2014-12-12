@@ -10,18 +10,15 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+/**
+ * Loosely based on course SurfaceView example.
+ */
 public class FlowerSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private SurfaceHolder holder;
 	private boolean hasSurface;
 
 	public final int X_RESOLUTION, Y_RESOLUTION;
-
-	private Sprite flowerSprite;
-
-	// Flags indicating motion of slMovable
-	private boolean movingRight, movingLeft;
-	private float slVelocity, flakeVelocity;
 
 	AccelerometerHandler accHandler;
 
@@ -42,19 +39,15 @@ public class FlowerSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		X_RESOLUTION = xRes;
 		Y_RESOLUTION = yRes;
 
+		// make a new flower
 		flower = new Flower(context, xRes, yRes);
-
+		// Accelerometer handler
 		accHandler = new AccelerometerHandler(context);
 
-		slVelocity = 4.0F;
-		flakeVelocity = 4.0F;
-
-		initGame();
+		initScreen();
 	}
 
-	private void initGame() {
-		movingRight = movingLeft = false;
-
+	private void initScreen() {
 		setFocusable(true);
 		requestFocus();
 	}
@@ -77,15 +70,6 @@ public class FlowerSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		}
 	}
 
-	protected void move() {
-
-	}
-
-	// public boolean onTouchEvent(MotionEvent event) {
-	// flower.explode();
-	// return false;
-	// }
-
 	protected void draw(float deltaTime) {
 
 		Canvas canvas = holder.lockCanvas();
@@ -96,7 +80,8 @@ public class FlowerSurfaceView extends SurfaceView implements SurfaceHolder.Call
 			canvas.drawPaint(paint);
 
 			if (accHandler.getShakeCompleted())
-				flower.explode();
+				flower.explode(); // if a shake has completed, make the flower
+									// explode
 			flower.draw(accHandler.getAccelX(), canvas, deltaTime);
 		}
 		holder.unlockCanvasAndPost(canvas);
