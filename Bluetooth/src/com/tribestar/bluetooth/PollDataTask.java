@@ -53,6 +53,8 @@ class PollDataTask extends Thread {
 				V.log("ACK");
 				// byte[] frame = new byte[4];
 				// this -obsolete- format specifies 4 bytes per frame
+				int msb = 0;
+				int lsb = 0;
 				for (int packet = 1; true; packet++) {
 					for (int i = 1; i <= 25; i++) {
 						byte[] frame = new byte[FRAME_SIZE];
@@ -67,10 +69,28 @@ class PollDataTask extends Thread {
 						// value1 + "; " + value2 + "; " + value3
 						// + "; " + value4 + "\r\n";
 						// if (i == 18 || i == 24) {
-						if (i == 3) {
+
+						if (i == 20 || i == 21) {
 							output = packet + "." + i + ": " + value3;
-							V.log(output);
+							// V.log(output);
 						}
+
+						if (i == 20) {
+
+							msb = value3 & MSB_BITMASK;
+							// V.log("msb: " + msb + " val3: " + value3 +
+							// " byte" + frame[3]);
+						} else if (i == 21) {
+							lsb = value3 & LSB_BITMASK;
+							// V.log("lsb: " + lsb + " val3: " + value3 +
+							// " byte" + frame[3]);
+							msb = msb << 7;
+							// V.log("msbnew: " + msb);
+							int pulse = lsb + msb;
+							if (pulse > 20 && pulse < 150)
+								V.log("pulse: " + pulse);
+						}
+
 					}
 				}
 			}
@@ -106,6 +126,8 @@ class PollDataTask extends Thread {
 	private static final byte[] SELECT_FORMAT = { 0x02, 0x70, 0x04, 0x02, 0x02, 0x00, (byte) 0x78, 0x03 };
 	private static final byte FRAME_SIZE = 5;
 	private static final byte ACK = 0x06; // ACK from Nonin sensor
+	private static final int MSB_BITMASK = 3;
+	private static final int LSB_BITMASK = 127;
 
 	private static final UUID STANDARD_SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
