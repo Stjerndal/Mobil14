@@ -71,6 +71,7 @@ public class MainActivity extends Activity {
 					if (name.contains("Nonin")) {
 						noninDevice = device;
 						showToast("Paired device: " + name);
+						break;
 						// return;
 					}
 				}

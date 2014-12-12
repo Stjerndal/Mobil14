@@ -54,16 +54,26 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 				V.log("ACK");
 				// byte[] frame = new byte[4];
 				// this -obsolete- format specifies 4 bytes per frame
-				byte[] frame = new byte[FRAME_SIZE];
-				is.read(frame);
-				int value0 = unsignedByteToInt(frame[0]); // 01
-				int value1 = unsignedByteToInt(frame[1]); // STATUS
-				int value2 = unsignedByteToInt(frame[2]); // PLETH
-				int value3 = unsignedByteToInt(frame[3]); // PRMSB
-				int value4 = unsignedByteToInt(frame[4]); // CHK
+				for (int packet = 1; true; packet++) {
+					for (int i = 1; i <= 25; i++) {
+						byte[] frame = new byte[FRAME_SIZE];
+						is.read(frame);
+						int value0 = unsignedByteToInt(frame[0]); // 01
+						int value1 = unsignedByteToInt(frame[1]); // STATUS
+						int value2 = unsignedByteToInt(frame[2]); // PLETH
+						int value3 = unsignedByteToInt(frame[3]); // PRMSB
+						int value4 = unsignedByteToInt(frame[4]); // CHK
 
-				output = value0 + "; " + value1 + "; " + value2 + "; " + value3 + "; " + value4 + "\r\n";
-				V.log(output);
+						// output = packet + "." + i + ":  " + value0 + "; " +
+						// value1 + "; " + value2 + "; " + value3
+						// + "; " + value4 + "\r\n";
+						// if (i == 18 || i == 24) {
+						if (i == 3) {
+							output = packet + "." + i + ": " + value3;
+							V.log(output);
+						}
+					}
+				}
 			}
 		} catch (Exception e) {
 			output = e.getMessage();
