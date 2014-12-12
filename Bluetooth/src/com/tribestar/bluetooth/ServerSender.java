@@ -29,6 +29,7 @@ public class ServerSender extends Thread {
 
 	public ServerSender(String filename, Activity activity) {
 		log("Starting serverSender");
+		// get the root folder of the external storage and add our filename
 		this.filename = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
 		this.activity = activity;
 
@@ -37,7 +38,7 @@ public class ServerSender extends Thread {
 	public void run() {
 		log("ServerSender run()");
 		try {
-
+			// initiate a socket to the server
 			this.socket = new Socket(address, port);
 
 			out = new PrintWriter(socket.getOutputStream(), true);
@@ -45,13 +46,10 @@ public class ServerSender extends Thread {
 			stdIn = new BufferedReader(new InputStreamReader(System.in));
 
 			log("ServerSender established connection with server at: " + address);
-			// while ((message = stdIn.readLine()) != null) {
 
 			// makeTestFile();
 			sendFile();
 			notifyUIThread("ServerSender completed transmission");
-
-			// }
 
 		} catch (Exception ex) {
 			notifyUIThread("Couldn't establish connection to server");
@@ -68,14 +66,18 @@ public class ServerSender extends Thread {
 			FileInputStream fis = new FileInputStream(file);
 			BufferedInputStream bis = new BufferedInputStream(fis);
 			BufferedOutputStream out = new BufferedOutputStream(socket.getOutputStream());
+			// bytebuffer
 			byte[] bytes = new byte[(int) file.length()];
 
 			int count;
+			// while there is still bytes to be read on the stream
 			while ((count = bis.read(bytes)) > 0) {
+				// write to file
 				out.write(bytes, 0, count);
 
 				System.out.println(count);
 			}
+			// close all streams
 			out.flush();
 			out.close();
 			fis.close();
@@ -91,6 +93,7 @@ public class ServerSender extends Thread {
 
 	public void closeAll() {
 		try {
+			// make sure we close all streams
 			out.close();
 			in.close();
 			stdIn.close();

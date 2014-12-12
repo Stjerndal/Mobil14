@@ -41,12 +41,15 @@ class PollDataTask extends Thread {
 		adapter.cancelDiscovery();
 
 		try {
+			// connect the bluetooth socket
 			socket = noninDevice.createRfcommSocketToServiceRecord(STANDARD_SPP_UUID);
 			socket.connect();
 			V.log("Connected");
 
+			// socket streams
 			is = socket.getInputStream();
 			os = socket.getOutputStream();
+			// file stream
 			pw = new PrintWriter(new FileOutputStream(new File(filename)));
 			pw.write("Pulse\tPleth\n");
 
@@ -58,6 +61,7 @@ class PollDataTask extends Thread {
 			is.read(reply);
 			V.log("REPLIED");
 
+			// see if we received an ack
 			if (reply[0] == ACK) {
 				V.log("ACK");
 				// byte[] frame = new byte[4];
@@ -70,10 +74,11 @@ class PollDataTask extends Thread {
 						is.read(frame);
 						int value0 = unsignedByteToInt(frame[0]); // 01
 						int value1 = unsignedByteToInt(frame[1]); // STATUS
-						if (checkSync(value1)) {
+						if (checkSync(value1)) { // check if we are out of sync
 							if (i != 1) {
 								V.log("WAS OUT OF SYNC..CORRECTING...");
 							}
+							// resync
 							i = 1;
 							continue;
 						}
@@ -82,11 +87,7 @@ class PollDataTask extends Thread {
 						int value3 = unsignedByteToInt(frame[3]); // PRMSB
 						int value4 = unsignedByteToInt(frame[4]); // CHK
 
-						// output = packet + "." + i + ":  " + value0 + "; " +
-						// value1 + "; " + value2 + "; " + value3
-						// + "; " + value4 + "\r\n";
-						// if (i == 18 || i == 24) {
-
+						// frame 20 and 21 is MSB and LSB - pulses
 						if (i == 20 || i == 21) {
 							if (!checkStatus(value1))
 								continue;
@@ -95,20 +96,18 @@ class PollDataTask extends Thread {
 						}
 
 						if (i == 20) {
-
+							// mask the most significant bits
 							msb = value3 & MSB_BITMASK;
-							// V.log("msb: " + msb + " val3: " + value3 +
-							// " byte" + frame[3]);
 						} else if (i == 21) {
+							// mask the least significant bits
 							lsb = value3 & LSB_BITMASK;
-							// V.log("lsb: " + lsb + " val3: " + value3 +
-							// " byte" + frame[3]);
+							// shift the most significant bits 7 bits to the
+							// left
 							msb = msb << 7;
-							// V.log("msbnew: " + msb);
+							// add lsb and msb together to forme the pulse
 							pulse = lsb + msb;
 						}
 
-						// if (pulse > 20 && pulse < 200) {
 						if (pulse > 0) {
 							int pleth = value2;
 							// String out = pulse + "\t" + pleth + "\n";
@@ -139,7 +138,6 @@ class PollDataTask extends Thread {
 	}
 
 	private static boolean checkSync(int status) {
-		// V.log("sync masked: " + (status & 0b1));
 		if ((status & 0b1) == 1) {// sync bit is first bit
 			return true;
 		} else
@@ -178,8 +176,7 @@ class PollDataTask extends Thread {
 	private void writeToScreen(final String message) {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
-				// V.log("Toasted the UI thread with: " + message);
-				// Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+				// write to the textview, using the UI-thread
 				TextView view = (TextView) activity.findViewById(R.id.textView2);
 				view.setText(message);
 			}
