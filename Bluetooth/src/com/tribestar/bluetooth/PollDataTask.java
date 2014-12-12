@@ -106,15 +106,16 @@ class PollDataTask extends Thread {
 							msb = msb << 7;
 							// V.log("msbnew: " + msb);
 							pulse = lsb + msb;
-							if (pulse > 20 && pulse < 200) {
-								int pleth = value2;
-								// String out = pulse + "\t" + pleth + "\n";
-								V.log("pulse: " + pulse + " pleth: " + pleth);
-								writeToScreen("Pulse:" + pulse);
-								pw.write(pulse + "\t" + pleth + "\n");
-								pw.flush();
-							}
+						}
 
+						// if (pulse > 20 && pulse < 200) {
+						if (pulse > 0) {
+							int pleth = value2;
+							// String out = pulse + "\t" + pleth + "\n";
+							V.log("pulse: " + pulse + " pleth: " + pleth);
+							writeToScreen("Pulse:" + pulse);
+							pw.write(pulse + "\t" + pleth + "\n");
+							pw.flush();
 						}
 
 					}
