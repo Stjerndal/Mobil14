@@ -94,6 +94,16 @@ public class MainActivity extends Activity {
 	}
 
 	public void onSendDataToServerClicked(View view) {
+		try {
+			((PollDataTask) bluetoothReceiver).cancel();
+			bluetoothReceiver.interrupt();
+
+			// if (pollData != null) {
+			// pollData.cancel(true);
+			// }
+		} catch (Exception e) {
+
+		}
 		showToast("Contacting server");
 		serverSender = new ServerSender(filename, this);
 		serverSender.start();
