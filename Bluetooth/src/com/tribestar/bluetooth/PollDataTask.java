@@ -29,6 +29,7 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 	@Override
 	protected String doInBackground(Void... v) {
 		String output = "";
+		V.log("Starting background");
 
 		// an ongoing discovery will slow down the connection
 		adapter.cancelDiscovery();
@@ -36,17 +37,21 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 		try {
 			socket = noninDevice.createRfcommSocketToServiceRecord(STANDARD_SPP_UUID);
 			socket.connect();
+			V.log("Connected");
 
 			is = socket.getInputStream();
 			os = socket.getOutputStream();
 
+			V.log("Streamed");
 			// os.write(FORMAT);
 			os.write(SELECT_FORMAT);
 			os.flush();
 			byte[] reply = new byte[1];
 			is.read(reply);
+			V.log("REPLIED");
 
 			if (reply[0] == ACK) {
+				V.log("ACK");
 				// byte[] frame = new byte[4];
 				// this -obsolete- format specifies 4 bytes per frame
 				byte[] frame = new byte[FRAME_SIZE];
@@ -58,6 +63,7 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 				int value4 = unsignedByteToInt(frame[4]); // CHK
 
 				output = value0 + "; " + value1 + "; " + value2 + "; " + value3 + "; " + value4 + "\r\n";
+				V.log(output);
 			}
 		} catch (Exception e) {
 			output = e.getMessage();

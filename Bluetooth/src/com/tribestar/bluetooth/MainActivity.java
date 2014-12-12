@@ -74,8 +74,11 @@ public class MainActivity extends Activity {
 				}
 			}
 
+			V.log("BG init");
 			pollData = new PollDataTask(this, noninDevice, filename);
+			V.log("BG exec...");
 			pollData.execute();
+			V.log("Executed.");
 
 		} else {
 			// ((BluetoothReceiver) bluetoothReceiver).cancel();
