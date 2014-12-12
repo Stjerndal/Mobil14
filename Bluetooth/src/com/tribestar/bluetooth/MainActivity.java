@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
 			// V.log("Executed.");
 
 		} else {
-			((BluetoothReceiver) bluetoothReceiver).cancel();
+			((PollDataTask) bluetoothReceiver).cancel();
 			bluetoothReceiver.interrupt();
 			showToast("Stopped downloading");
 			// pollData.cancel(true);
