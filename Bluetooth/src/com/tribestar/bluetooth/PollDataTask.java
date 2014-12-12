@@ -63,6 +63,13 @@ class PollDataTask extends Thread {
 						is.read(frame);
 						int value0 = unsignedByteToInt(frame[0]); // 01
 						int value1 = unsignedByteToInt(frame[1]); // STATUS
+						if (checkSync(value1)) {
+							if (i != 1) {
+								V.log("WAS OUT OF SYNC..CORRECTING...");
+							}
+							i = 1;
+							continue;
+						}
 
 						int value2 = unsignedByteToInt(frame[2]); // PLETH
 						int value3 = unsignedByteToInt(frame[3]); // PRMSB
@@ -117,6 +124,14 @@ class PollDataTask extends Thread {
 		}
 
 		// return output;
+	}
+
+	private static boolean checkSync(int status) {
+		// V.log("sync masked: " + (status & 0b1));
+		if ((status & 0b1) == 1) {// sync bit is first bit
+			return true;
+		} else
+			return false;
 	}
 
 	private static boolean checkStatus(int status) {
