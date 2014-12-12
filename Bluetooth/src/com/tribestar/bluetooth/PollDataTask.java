@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Environment;
+import android.widget.TextView;
 import android.widget.Toast;
 
 class PollDataTask extends Thread {
@@ -91,8 +92,12 @@ class PollDataTask extends Thread {
 							msb = msb << 7;
 							// V.log("msbnew: " + msb);
 							int pulse = lsb + msb;
-							if (pulse > 20 && pulse < 200)
-								V.log("pulse: " + pulse);
+							if (pulse > 20 && pulse < 200) {
+								String out = "pulse: " + pulse;
+								V.log(out);
+								writeToScreen(out);
+							}
+
 						}
 
 					}
@@ -145,10 +150,10 @@ class PollDataTask extends Thread {
 	private void writeToScreen(final String message) {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
-				//V.log("Toasted the UI thread with: " + message);
-				//Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
-				(TextView) view = activity.findViewById(R.id.textView2);
-				
+				// V.log("Toasted the UI thread with: " + message);
+				// Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+				TextView view = (TextView) activity.findViewById(R.id.textView2);
+				view.setText(message);
 			}
 		});
 	}
