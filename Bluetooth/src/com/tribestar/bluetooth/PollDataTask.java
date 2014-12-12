@@ -61,6 +61,7 @@ class PollDataTask extends Thread {
 						is.read(frame);
 						int value0 = unsignedByteToInt(frame[0]); // 01
 						int value1 = unsignedByteToInt(frame[1]); // STATUS
+
 						int value2 = unsignedByteToInt(frame[2]); // PLETH
 						int value3 = unsignedByteToInt(frame[3]); // PRMSB
 						int value4 = unsignedByteToInt(frame[4]); // CHK
@@ -71,6 +72,8 @@ class PollDataTask extends Thread {
 						// if (i == 18 || i == 24) {
 
 						if (i == 20 || i == 21) {
+							if (!checkStatus(value1))
+								continue;
 							output = packet + "." + i + ": " + value3;
 							// V.log(output);
 						}
@@ -87,7 +90,7 @@ class PollDataTask extends Thread {
 							msb = msb << 7;
 							// V.log("msbnew: " + msb);
 							int pulse = lsb + msb;
-							if (pulse > 20 && pulse < 150)
+							if (pulse > 20 && pulse < 200)
 								V.log("pulse: " + pulse);
 						}
 
@@ -108,6 +111,15 @@ class PollDataTask extends Thread {
 		}
 
 		// return output;
+	}
+
+	private static boolean checkStatus(int status) {
+
+		if ((status & 0b111100) > 0) {// status is bad
+			V.log("status masked: " + (status & 0b111100));
+			return false;
+		} else
+			return true;
 	}
 
 	public void cancel() {
