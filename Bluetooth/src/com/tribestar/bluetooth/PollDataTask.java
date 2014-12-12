@@ -12,6 +12,9 @@ import android.os.Environment;
 
 class PollDataTask extends AsyncTask<Void, Void, String> {
 	private String filename;
+	InputStream is = null;
+	OutputStream os = null;
+	BluetoothSocket socket = null;
 
 	protected PollDataTask(MainActivity activity, BluetoothDevice noninDevice, String filename) {
 		this.activity = activity;
@@ -30,13 +33,12 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 		// an ongoing discovery will slow down the connection
 		adapter.cancelDiscovery();
 
-		BluetoothSocket socket = null;
 		try {
 			socket = noninDevice.createRfcommSocketToServiceRecord(STANDARD_SPP_UUID);
 			socket.connect();
 
-			InputStream is = socket.getInputStream();
-			OutputStream os = socket.getOutputStream();
+			is = socket.getInputStream();
+			os = socket.getOutputStream();
 
 			// os.write(FORMAT);
 			os.write(SELECT_FORMAT);
@@ -62,12 +64,27 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 		} finally {
 			try {
 				if (socket != null)
-					socket.close();
+					is.close();
+				os.close();
+				socket.close();
+
 			} catch (Exception e) {
 			}
 		}
 
 		return output;
+	}
+
+	@Override
+	protected void onCancelled() {
+		try {
+			is.close();
+			os.close();
+			socket.close();
+
+		} catch (Exception e) {
+		}
+		super.onCancelled();
 	}
 
 	/**

@@ -1,6 +1,10 @@
 package com.tribestar.bluetooth;
 
+import java.util.Set;
+
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,14 +14,23 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
 
-	private Thread bluetoothReceiver;
+	// private Thread bluetoothReceiver;
+	private PollDataTask pollData;
 	private Thread serverSender;
 	private String filename = "SensorData.txt";
+	private BluetoothAdapter bluetoothAdapter;
+	private BluetoothDevice noninDevice;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		if (bluetoothAdapter == null) {
+			showToast("This device do not support Bluetooth");
+			this.finish();
+		}
 
 	}
 
@@ -44,14 +57,32 @@ public class MainActivity extends Activity {
 		// Is the toggle on?
 		boolean on = ((ToggleButton) view).isChecked();
 		if (on) {
-			bluetoothReceiver = new BluetoothReceiver(filename, this);
-			bluetoothReceiver.start();
+			// bluetoothReceiver = new BluetoothReceiver(filename, this);
+			// bluetoothReceiver.start();
 			// showToast("Now downloading");
 
+			Set<BluetoothDevice> pairedBTDevices = bluetoothAdapter.getBondedDevices();
+			if (pairedBTDevices.size() > 0) {
+
+				for (BluetoothDevice device : pairedBTDevices) {
+					String name = device.getName();
+					if (name.contains("Nonin")) {
+						noninDevice = device;
+						showToast("Paired device: " + name);
+						return;
+					}
+				}
+			}
+
+			pollData = new PollDataTask(this, noninDevice, filename);
+			pollData.execute();
+
 		} else {
-			((BluetoothReceiver) bluetoothReceiver).cancel();
-			bluetoothReceiver.interrupt();
+			// ((BluetoothReceiver) bluetoothReceiver).cancel();
+			// bluetoothReceiver.interrupt();
 			// showToast("Stopped downloading");
+			pollData.interrupt();
+			pollData.cancel(true);
 		}
 	}
 
