@@ -54,6 +54,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void onToggleClicked(View view) {
+		V.log("CLICK");
 		// Is the toggle on?
 		boolean on = ((ToggleButton) view).isChecked();
 		if (on) {
@@ -63,15 +64,17 @@ public class MainActivity extends Activity {
 
 			Set<BluetoothDevice> pairedBTDevices = bluetoothAdapter.getBondedDevices();
 			if (pairedBTDevices.size() > 0) {
-
+				V.log("PAIRED WITH SHIT");
 				for (BluetoothDevice device : pairedBTDevices) {
+					V.log("LOOP");
 					String name = device.getName();
 					if (name.contains("Nonin")) {
 						noninDevice = device;
 						showToast("Paired device: " + name);
-						return;
+						// return;
 					}
 				}
+				V.log("POST LOOP");
 			}
 
 			V.log("BG init");
