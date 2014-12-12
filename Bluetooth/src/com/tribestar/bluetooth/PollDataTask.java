@@ -1,7 +1,10 @@
 package com.tribestar.bluetooth;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
@@ -15,6 +18,7 @@ class PollDataTask extends Thread {
 	private String filename;
 	InputStream is = null;
 	OutputStream os = null;
+	PrintWriter pw = null;
 	BluetoothSocket socket = null;
 
 	protected PollDataTask(MainActivity activity, BluetoothDevice noninDevice, String filename) {
@@ -42,6 +46,7 @@ class PollDataTask extends Thread {
 
 			is = socket.getInputStream();
 			os = socket.getOutputStream();
+			pw = new PrintWriter(new FileOutputStream(new File(filename)));
 
 			V.log("Streamed");
 			// os.write(FORMAT);
@@ -103,6 +108,8 @@ class PollDataTask extends Thread {
 								String out = "pulse: " + pulse;
 								V.log(out);
 								writeToScreen(out);
+								pw.write(out);
+								pw.flush();
 							}
 
 						}
@@ -118,6 +125,7 @@ class PollDataTask extends Thread {
 					is.close();
 				os.close();
 				socket.close();
+				pw.close();
 
 			} catch (Exception e) {
 			}
@@ -148,6 +156,7 @@ class PollDataTask extends Thread {
 			is.close();
 			os.close();
 			socket.close();
+			pw.close();
 
 		} catch (Exception e) {
 		}

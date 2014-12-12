@@ -47,7 +47,7 @@ public class ServerSender extends Thread {
 			log("ServerSender established connection with server at: " + address);
 			// while ((message = stdIn.readLine()) != null) {
 
-			makeTestFile();
+			// makeTestFile();
 			sendFile();
 			notifyUIThread("ServerSender completed transmission");
 
