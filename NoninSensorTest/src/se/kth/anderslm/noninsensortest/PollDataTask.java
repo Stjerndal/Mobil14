@@ -35,24 +35,26 @@ class PollDataTask extends AsyncTask<Void, Void, String> {
 			InputStream is = socket.getInputStream();
 			OutputStream os = socket.getOutputStream();
 
-			// os.write(FORMAT);
-			os.write(SELECT_FORMAT);
+			os.write(FORMAT);
+			// os.write(SELECT_FORMAT);
 			os.flush();
 			byte[] reply = new byte[1];
 			is.read(reply);
 
 			if (reply[0] == ACK) {
-				// byte[] frame = new byte[4];
+				byte[] frame = new byte[4];
 				// this -obsolete- format specifies 4 bytes per frame
-				byte[] frame = new byte[FRAME_SIZE];
+				// byte[] frame = new byte[FRAME_SIZE];
 				is.read(frame);
 				int value0 = unsignedByteToInt(frame[0]); // 01
 				int value1 = unsignedByteToInt(frame[1]); // STATUS
-				int value2 = unsignedByteToInt(frame[2]); // PLETH
-				int value3 = unsignedByteToInt(frame[3]); // PRMSB
-				int value4 = unsignedByteToInt(frame[4]); // CHK
+				// int value2 = unsignedByteToInt(frame[2]); // PLETH
+				// int value3 = unsignedByteToInt(frame[3]); // PRMSB
+				// int value4 = unsignedByteToInt(frame[4]); // CHK
 
-				output = value0 + "; " + value1 + value2 + "; " + value3 + value4 + "\r\n";
+				// output = value0 + "; " + value1 + value2 + "; " + value3 +
+				// value4 + "\r\n";
+				output = value0 + "; " + value1;
 			}
 		} catch (Exception e) {
 			output = e.getMessage();
