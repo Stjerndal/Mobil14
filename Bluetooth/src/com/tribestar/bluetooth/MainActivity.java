@@ -81,7 +81,6 @@ public class MainActivity extends Activity {
 			// ((BluetoothReceiver) bluetoothReceiver).cancel();
 			// bluetoothReceiver.interrupt();
 			// showToast("Stopped downloading");
-			pollData.interrupt();
 			pollData.cancel(true);
 		}
 	}
@@ -101,8 +100,9 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		try {
-			((BluetoothReceiver) bluetoothReceiver).cancel();
-			bluetoothReceiver.interrupt();
+			// ((BluetoothReceiver) bluetoothReceiver).cancel();
+			// bluetoothReceiver.interrupt();
+			pollData.cancel(true);
 		} catch (Exception e) {
 			((ServerSender) serverSender).closeAll();
 			serverSender.interrupt();
