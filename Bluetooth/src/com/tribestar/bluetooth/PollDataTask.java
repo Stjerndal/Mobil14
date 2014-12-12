@@ -8,13 +8,16 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.AsyncTask;
+import android.os.Environment;
 
 class PollDataTask extends AsyncTask<Void, Void, String> {
+	private String filename;
 
-	protected PollDataTask(MainActivity activity, BluetoothDevice noninDevice) {
+	protected PollDataTask(MainActivity activity, BluetoothDevice noninDevice, String filename) {
 		this.activity = activity;
 		this.noninDevice = noninDevice;
 		this.adapter = BluetoothAdapter.getDefaultAdapter();
+		this.filename = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
 	}
 
 	/**
